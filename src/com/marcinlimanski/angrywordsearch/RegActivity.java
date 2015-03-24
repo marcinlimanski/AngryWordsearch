@@ -2,6 +2,7 @@ package com.marcinlimanski.angrywordsearch;
 
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -36,16 +37,22 @@ public class RegActivity extends Activity implements OnHTTPReg{
 			//Debug to see if user information is extracted
 			Log.i("User Info: ", nameReg + ", " + surnameReg + ", " + usernameReg + ", " + passwordReg);
 			
-			//Constructing a get request 
-			String url  = "http://08309.net.dcs.hull.ac.uk/api/admin/register?"
-					+ "firstname="+ nameReg +
-					"&Surname="+ surnameReg +
-					"&username="+ usernameReg+
-					"&password="+ passwordReg;
+			if(!nameReg.equals("") && !surnameReg.equals("") && !usernameReg.equals("") && !passwordReg.equals("")){
+				//Constructing a get request 
+				String url  = "http://08309.net.dcs.hull.ac.uk/api/admin/register?"
+						+ "firstname="+ nameReg +
+						"&Surname="+ surnameReg +
+						"&username="+ usernameReg+
+						"&password="+ passwordReg;
+				
+				//Using HttpClient to send the extracted data to register a user
+				RegHTTPAsync regUser =  new RegHTTPAsync(this);
+				regUser.execute(url);
+			}
+			else{
+				Log.i("", "no values ");
+			}
 			
-			//Using HttpClient to send the extracted data to register a user
-			RegHTTPAsync regUser =  new RegHTTPAsync(this);
-			regUser.execute(url);
 
 		}
 	}
@@ -54,6 +61,10 @@ public class RegActivity extends Activity implements OnHTTPReg{
 	public void onTaskCompleted(String httpData) {
 		Log.i("onTaskComplete: ", "done");
 		Log.i("Server Response: ", httpData.toString());
+		if(httpData.contains("OK")){
+			Intent startViewIntent = new Intent(this, StartActivity.class);
+			startActivity(startViewIntent);
+		}
 		
 	}
 }
