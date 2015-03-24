@@ -1,6 +1,5 @@
 package com.marcinlimanski.angrywordsearch;
 
-import org.apache.http.client.HttpClient;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -8,7 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
-public class RegActivity extends Activity {
+public class RegActivity extends Activity implements OnHTTPReg{
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -37,9 +36,24 @@ public class RegActivity extends Activity {
 			//Debug to see if user information is extracted
 			Log.i("User Info: ", nameReg + ", " + surnameReg + ", " + usernameReg + ", " + passwordReg);
 			
+			//Constructing a get request 
+			String url  = "http://08309.net.dcs.hull.ac.uk/api/admin/register?"
+					+ "firstname="+ nameReg +
+					"&Surname="+ surnameReg +
+					"&username="+ usernameReg+
+					"&password="+ passwordReg;
 			
-			
-			
+			//Using HttpClient to send the extracted data to register a user
+			RegHTTPAsync regUser =  new RegHTTPAsync(this);
+			regUser.execute(url);
+
 		}
+	}
+
+	@Override
+	public void onTaskCompleted(String httpData) {
+		Log.i("onTaskComplete: ", "done");
+		Log.i("Server Response: ", httpData.toString());
+		
 	}
 }
