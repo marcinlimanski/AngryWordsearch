@@ -4,6 +4,7 @@ import org.apache.http.client.HttpClient;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
@@ -32,6 +33,11 @@ public class RegActivity extends Activity {
 			
 			EditText textPassword = (EditText)this.findViewById(R.id.tbPasswordReg);
 			String passwordReg = textPassword.getText().toString();
+			
+			//Debug to see if user information is extracted
+			Log.i("User Info: ", nameReg + ", " + surnameReg + ", " + usernameReg + ", " + passwordReg);
+			
+			
 			
 			
 		}
