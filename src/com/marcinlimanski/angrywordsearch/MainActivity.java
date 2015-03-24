@@ -1,9 +1,11 @@
 package com.marcinlimanski.angrywordsearch;
 
 import android.support.v7.app.ActionBarActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -19,7 +21,8 @@ public class MainActivity extends ActionBarActivity {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
-
+	
+	//Pre generated menu 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle action bar item clicks here. The action bar will
@@ -30,5 +33,12 @@ public class MainActivity extends ActionBarActivity {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+	
+	public void btnRegClicked(View v){
+		if(v.getId() == R.id.btnReg){
+			Intent regViewIntent = new Intent(this, RegActivity.class);
+			startActivity(regViewIntent);
+		}
 	}
 }
