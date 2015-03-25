@@ -41,4 +41,11 @@ public class MainActivity extends ActionBarActivity {
 			startActivity(regViewIntent);
 		}
 	}
+	
+	public void btnLogInMainClicked(View v){
+		if(v.getId() == R.id.btnLogInMain){
+			Intent logViewIntent = new Intent(this, LogInActivity.class);
+			startActivity(logViewIntent);
+		}
+	}
 }
