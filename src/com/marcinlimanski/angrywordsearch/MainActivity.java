@@ -3,11 +3,13 @@ package com.marcinlimanski.angrywordsearch;
 import android.support.v7.app.ActionBarActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements OnHTTPReg{
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -37,15 +39,57 @@ public class MainActivity extends ActionBarActivity {
 	
 	public void btnRegClicked(View v){
 		if(v.getId() == R.id.btnReg){
-			Intent regViewIntent = new Intent(this, RegActivity.class);
-			startActivity(regViewIntent);
+			//Extracting the user info from textboxes 
+			EditText textName = (EditText)this.findViewById(R.id.tbFirstNameReg);
+			String nameReg = textName.getText().toString();
+			
+			EditText textSurname = (EditText)this.findViewById(R.id.tbSurnameReg);
+			String surnameReg = textSurname.getText().toString();
+			
+			EditText textUserName = (EditText)this.findViewById(R.id.tbUsernameReg);
+			String usernameReg = textUserName.getText().toString();
+			
+			EditText textPassword = (EditText)this.findViewById(R.id.tbPasswordReg);
+			String passwordReg = textPassword.getText().toString();
+			
+			//Debug to see if user information is extracted
+			Log.i("User Info: ", nameReg + ", " + surnameReg + ", " + usernameReg + ", " + passwordReg);
+			
+			if(!nameReg.equals("") && !surnameReg.equals("") && !usernameReg.equals("") && !passwordReg.equals("")){
+				//Constructing a get request 
+				String url  = "http://08309.net.dcs.hull.ac.uk/api/admin/register?"
+						+ "firstname="+ nameReg +
+						"&Surname="+ surnameReg +
+						"&username="+ usernameReg+
+						"&password="+ passwordReg;
+				
+				//Using HttpClient to send the extracted data to register a user
+				RegHTTPAsync regUser =  new RegHTTPAsync(this);
+				regUser.execute(url);
+			}
+			else{
+				Log.i("", "no values ");
+			}
 		}
 	}
 	
 	public void btnLogInMainClicked(View v){
 		if(v.getId() == R.id.btnLogInMain){
-			Intent logViewIntent = new Intent(this, LogInActivity.class);
+			Intent logViewIntent = new Intent(this, LogActivity.class);
 			startActivity(logViewIntent);
 		}
 	}
+
+	@Override
+	public void onTaskCompleted(String httpData) {
+		Log.i("onTaskComplete: ", "done");
+		Log.i("Server Response: ", httpData.toString());
+		if(httpData.contains("OK")){
+			Intent startViewIntent = new Intent(this, StartActivity.class);
+			startActivity(startViewIntent);
+		}
+		
+		
+	}
+	
 }

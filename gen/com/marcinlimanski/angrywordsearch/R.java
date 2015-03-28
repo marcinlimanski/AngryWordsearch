@@ -1638,6 +1638,8 @@ containing a value of this type.
         public static final int ic_launcher=0x7f020035;
     }
     public static final class id {
+        public static final int LinearLayout1=0x7f09003f;
+        public static final int RegLayout=0x7f09004b;
         public static final int action_bar=0x7f090031;
         public static final int action_bar_activity_content=0x7f090003;
         public static final int action_bar_container=0x7f090030;
@@ -1646,20 +1648,19 @@ containing a value of this type.
         public static final int action_bar_subtitle=0x7f09001f;
         public static final int action_bar_title=0x7f09001e;
         public static final int action_context_bar=0x7f090032;
-        public static final int action_example=0x7f09004e;
         public static final int action_menu_divider=0x7f090005;
         public static final int action_menu_presenter=0x7f090006;
         public static final int action_mode_bar=0x7f09002e;
         public static final int action_mode_bar_stub=0x7f09002d;
         public static final int action_mode_close_button=0x7f090020;
-        public static final int action_settings=0x7f09004d;
+        public static final int action_settings=0x7f090050;
         public static final int activity_chooser_view_content=0x7f090021;
         public static final int always=0x7f090014;
         public static final int beginning=0x7f09001b;
-        public static final int btnLogInMain=0x7f090045;
-        public static final int btnLoginLog=0x7f090043;
-        public static final int btnReg=0x7f090044;
-        public static final int btnRegUser=0x7f09004c;
+        public static final int btnLogInMain=0x7f09004e;
+        public static final int btnLogUser=0x7f090044;
+        public static final int btnReg=0x7f09004c;
+        public static final int checkBox1=0x7f09004d;
         public static final int checkbox=0x7f090029;
         public static final int collapseActionView=0x7f090015;
         public static final int decor_content_parent=0x7f09002f;
@@ -1677,6 +1678,7 @@ containing a value of this type.
         public static final int ifRoom=0x7f090016;
         public static final int image=0x7f090023;
         public static final int listMode=0x7f09000a;
+        public static final int listView1=0x7f09004f;
         public static final int list_item=0x7f090025;
         public static final int middle=0x7f09001d;
         public static final int never=0x7f090017;
@@ -1702,16 +1704,16 @@ containing a value of this type.
         public static final int split_action_bar=0x7f090004;
         public static final int submit_area=0x7f09003c;
         public static final int tabMode=0x7f09000c;
-        public static final int tbFirstNameReg=0x7f090046;
-        public static final int tbPasswordLog=0x7f090042;
-        public static final int tbPasswordReg=0x7f09004b;
-        public static final int tbSurnameReg=0x7f090047;
-        public static final int tbUserNameLog=0x7f090040;
-        public static final int tbUserNameReg=0x7f090049;
-        public static final int textView1=0x7f09003f;
-        public static final int textView2=0x7f090041;
-        public static final int textView3=0x7f090048;
-        public static final int textView4=0x7f09004a;
+        public static final int tbFirstNameReg=0x7f090045;
+        public static final int tbPasswordLog=0x7f090043;
+        public static final int tbPasswordReg=0x7f09004a;
+        public static final int tbSurnameReg=0x7f090046;
+        public static final int tbUserNameLog=0x7f090041;
+        public static final int tbUsernameReg=0x7f090048;
+        public static final int textView1=0x7f090040;
+        public static final int textView2=0x7f090042;
+        public static final int textView3=0x7f090047;
+        public static final int textView4=0x7f090049;
         public static final int title=0x7f090027;
         public static final int up=0x7f090001;
         public static final int useLogo=0x7f090013;
@@ -1767,16 +1769,17 @@ containing a value of this type.
         public static final int abc_search_dropdown_item_icons_2line=0x7f030014;
         public static final int abc_search_view=0x7f030015;
         public static final int abc_simple_dropdown_hint=0x7f030016;
-        public static final int activity_login=0x7f030017;
+        public static final int activity_log=0x7f030017;
         public static final int activity_main=0x7f030018;
-        public static final int activity_reg=0x7f030019;
-        public static final int activity_start=0x7f03001a;
+        public static final int activity_start=0x7f030019;
+        public static final int data_item=0x7f03001a;
         public static final int support_simple_spinner_dropdown_item=0x7f03001b;
     }
     public static final class menu {
         public static final int global=0x7f0c0000;
-        public static final int main=0x7f0c0001;
-        public static final int test=0x7f0c0002;
+        public static final int log=0x7f0c0001;
+        public static final int main=0x7f0c0002;
+        public static final int start=0x7f0c0003;
     }
     public static final class string {
         /**  Content description for the action bar "home" affordance. [CHAR LIMIT=NONE] 
@@ -1837,10 +1840,25 @@ containing a value of this type.
         public static final int abc_toolbar_collapse_description=0x7f0a0004;
         public static final int action_example=0x7f0a0019;
         public static final int action_settings=0x7f0a0012;
+        public static final int action_sign_in=0x7f0a001f;
+        public static final int action_sign_in_short=0x7f0a0020;
         public static final int app_name=0x7f0a0010;
+        public static final int error_field_required=0x7f0a0026;
+        public static final int error_incorrect_password=0x7f0a0025;
+        public static final int error_invalid_email=0x7f0a0023;
+        public static final int error_invalid_password=0x7f0a0024;
         public static final int hello_world=0x7f0a0011;
         public static final int navigation_drawer_close=0x7f0a0018;
         public static final int navigation_drawer_open=0x7f0a0017;
+        public static final int plus_disconnect=0x7f0a0022;
+        public static final int plus_sign_out=0x7f0a0021;
+        /**  Strings related to login 
+         */
+        public static final int prompt_email=0x7f0a001d;
+        public static final int prompt_password=0x7f0a001e;
+        public static final int title_activity_log=0x7f0a001b;
+        public static final int title_activity_login=0x7f0a001c;
+        public static final int title_activity_start=0x7f0a001a;
         public static final int title_activity_test=0x7f0a0013;
         public static final int title_section1=0x7f0a0014;
         public static final int title_section2=0x7f0a0015;
