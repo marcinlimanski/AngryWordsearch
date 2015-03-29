@@ -1,6 +1,7 @@
 package com.marcinlimanski.angrywordsearch;
 
 import android.support.v7.app.ActionBarActivity;
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -35,10 +36,29 @@ public class StartActivity extends ActionBarActivity {
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
+		boolean handle = false;
+		
+		//using switch statment to catch the diffrent id
+		switch(id){
+			case R.id.option_logout:
+				handle = true;
+				break;
+			
+			case R.id.option_accinfo:
+				handle = true;
+				break;
+				
+			case R.id.option_unregister:
+				AlertDialog.Builder builder = new AlertDialog.Builder(StartActivity.this);
+				builder.setMessage("Are you sure you? All account data will be lost!");
+				handle = true;
+				break;
+				
+			default:
+				handle = super.onOptionsItemSelected(item);
+				
 		}
-		return super.onOptionsItemSelected(item);
+		return handle;
 	}
 	
 	private void populateListView(){

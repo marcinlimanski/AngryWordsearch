@@ -10,11 +10,20 @@ import android.view.View;
 import android.widget.EditText;
 
 public class MainActivity extends ActionBarActivity implements OnHTTPReg{
-
+	private String usernameReg = "";
+	private String passwordReg = "";
+	
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		String username = SharedPreferencesWrapper.getFromPrefs(this, "username", "");
+		if(!username.equals("")){
+			Intent startViewIntent = new Intent(this, StartActivity.class);
+			startActivity(startViewIntent);
+		}
+		
 	}
 
 	@Override
@@ -47,10 +56,10 @@ public class MainActivity extends ActionBarActivity implements OnHTTPReg{
 			String surnameReg = textSurname.getText().toString();
 			
 			EditText textUserName = (EditText)this.findViewById(R.id.tbUsernameReg);
-			String usernameReg = textUserName.getText().toString();
+			usernameReg = textUserName.getText().toString();
 			
 			EditText textPassword = (EditText)this.findViewById(R.id.tbPasswordReg);
-			String passwordReg = textPassword.getText().toString();
+			passwordReg = textPassword.getText().toString();
 			
 			//Debug to see if user information is extracted
 			Log.i("User Info: ", nameReg + ", " + surnameReg + ", " + usernameReg + ", " + passwordReg);
@@ -85,6 +94,10 @@ public class MainActivity extends ActionBarActivity implements OnHTTPReg{
 		Log.i("onTaskComplete: ", "done");
 		Log.i("Server Response: ", httpData.toString());
 		if(httpData.contains("OK")){
+			SharedPreferencesWrapper.saveToPrefs(this, "username", usernameReg);
+			SharedPreferencesWrapper.saveToPrefs(this, "password", passwordReg);
+			
+			
 			Intent startViewIntent = new Intent(this, StartActivity.class);
 			startActivity(startViewIntent);
 		}

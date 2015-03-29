@@ -1684,6 +1684,9 @@ containing a value of this type.
         public static final int never=0x7f090017;
         public static final int none=0x7f09000f;
         public static final int normal=0x7f09000b;
+        public static final int option_accinfo=0x7f090052;
+        public static final int option_logout=0x7f090051;
+        public static final int option_unregister=0x7f090053;
         public static final int progress_circular=0x7f090007;
         public static final int progress_horizontal=0x7f090008;
         public static final int radio=0x7f09002b;
@@ -1838,31 +1841,16 @@ containing a value of this type.
         /**  Content description for the Toolbar icon used to collapse an expanded action mode. [CHAR LIMIT=NONE] 
          */
         public static final int abc_toolbar_collapse_description=0x7f0a0004;
-        public static final int action_example=0x7f0a0019;
+        public static final int action_example=0x7f0a0014;
         public static final int action_settings=0x7f0a0012;
-        public static final int action_sign_in=0x7f0a001f;
-        public static final int action_sign_in_short=0x7f0a0020;
         public static final int app_name=0x7f0a0010;
-        public static final int error_field_required=0x7f0a0026;
-        public static final int error_incorrect_password=0x7f0a0025;
-        public static final int error_invalid_email=0x7f0a0023;
-        public static final int error_invalid_password=0x7f0a0024;
         public static final int hello_world=0x7f0a0011;
-        public static final int navigation_drawer_close=0x7f0a0018;
-        public static final int navigation_drawer_open=0x7f0a0017;
-        public static final int plus_disconnect=0x7f0a0022;
-        public static final int plus_sign_out=0x7f0a0021;
-        /**  Strings related to login 
-         */
-        public static final int prompt_email=0x7f0a001d;
-        public static final int prompt_password=0x7f0a001e;
-        public static final int title_activity_log=0x7f0a001b;
-        public static final int title_activity_login=0x7f0a001c;
-        public static final int title_activity_start=0x7f0a001a;
+        public static final int option_accinfo=0x7f0a0018;
+        public static final int option_logout=0x7f0a0017;
+        public static final int option_unregister=0x7f0a0019;
+        public static final int title_activity_log=0x7f0a0016;
+        public static final int title_activity_start=0x7f0a0015;
         public static final int title_activity_test=0x7f0a0013;
-        public static final int title_section1=0x7f0a0014;
-        public static final int title_section2=0x7f0a0015;
-        public static final int title_section3=0x7f0a0016;
     }
     public static final class style {
         /** 
