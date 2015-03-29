@@ -10,7 +10,9 @@ import android.view.View;
 import android.widget.EditText;
 
 public class LogActivity extends ActionBarActivity implements OnHTTPReg{
-
+	private String userName = "";
+	private String password = "";
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -40,10 +42,10 @@ public class LogActivity extends ActionBarActivity implements OnHTTPReg{
 		if(v.getId() == R.id.btnLogUser){
 			//Extracting the user info from textboxes 
 			EditText textUserName = (EditText)this.findViewById(R.id.tbUserNameLog);
-			String userName = textUserName.getText().toString();
+			userName = textUserName.getText().toString();
 			
 			EditText textPassword = (EditText)this.findViewById(R.id.tbPasswordLog);
-			String password = textPassword.getText().toString();
+			password = textPassword.getText().toString();
 			
 			//checking if the calues are not empty
 			if(!userName.equals("") && !password.equals("")){
@@ -61,6 +63,10 @@ public class LogActivity extends ActionBarActivity implements OnHTTPReg{
 	public void onTaskCompleted(String httpData) {
 		Log.i("Async task completed: ", httpData.toString());
 		if(httpData.contains("FullName")){
+			//Saving credentials to sharedPref
+			SharedPreferencesWrapper.saveToPrefs(this, "username", userName);
+			SharedPreferencesWrapper.saveToPrefs(this, "password", password);
+			
 			Intent startViewIntent = new Intent(this, StartActivity.class);
 			startActivity(startViewIntent);
 		}

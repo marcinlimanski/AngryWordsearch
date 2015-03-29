@@ -2,6 +2,7 @@ package com.marcinlimanski.angrywordsearch;
 
 import android.support.v7.app.ActionBarActivity;
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,8 +13,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class StartActivity extends ActionBarActivity {
-
+public class StartActivity extends ActionBarActivity implements OnHTTPReg{
+	public boolean unregisterFlag = false;
+	public boolean logOutFlag = false;
+	private String username = "";
+	private String password = "";
+		
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -41,6 +46,24 @@ public class StartActivity extends ActionBarActivity {
 		//using switch statment to catch the diffrent id
 		switch(id){
 			case R.id.option_logout:
+				AlertDialog.Builder logoutBuilder = new AlertDialog.Builder(StartActivity.this);
+				logoutBuilder.setMessage("Are you sure you want to log out?").setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						//Extracting the user credentials from shared pref class
+						username = SharedPreferencesWrapper.getFromPrefs(StartActivity.this, "username", "");
+						password = SharedPreferencesWrapper.getFromPrefs(StartActivity.this, "password", "");
+						
+						SharedPreferencesWrapper.removFromPrefs(StartActivity.this, "username", username);
+						SharedPreferencesWrapper.removFromPrefs(StartActivity.this, "password", password);
+						finish();
+						
+					}
+				});
+				//Building dialog box 
+				AlertDialog logoutDialog = logoutBuilder.create();
+				logoutDialog.show();
 				handle = true;
 				break;
 			
@@ -49,8 +72,34 @@ public class StartActivity extends ActionBarActivity {
 				break;
 				
 			case R.id.option_unregister:
-				AlertDialog.Builder builder = new AlertDialog.Builder(StartActivity.this);
-				builder.setMessage("Are you sure you? All account data will be lost!");
+				AlertDialog.Builder unregisterBuilder = new AlertDialog.Builder(StartActivity.this);
+				unregisterBuilder.setMessage("Are you sure you? All account data will be lost!").setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+					
+					//Event lisiner for the dialog box
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						//Setting check flag 
+						unregisterFlag = true;
+						
+						//Extracting the user credentials from shared pref class
+						username = SharedPreferencesWrapper.getFromPrefs(StartActivity.this, "username", "");
+						password = SharedPreferencesWrapper.getFromPrefs(StartActivity.this, "password", "");
+						
+						//Debug
+						//Toast.makeText(StartActivity.this, username + "," + password, Toast.LENGTH_LONG).show();
+						
+						//Creating a ASync thread
+						//Using HttpClient to send the extracted data to register a user
+						String url = "http://08309.net.dcs.hull.ac.uk/api/admin/unregister?username="+
+						username+"&password="+password;
+						RegHTTPAsync regUser =  new RegHTTPAsync(StartActivity.this);
+						regUser.execute(url);
+						
+					}
+				});
+				//Building dialog box 
+				AlertDialog unregisterDialog = unregisterBuilder.create();
+				unregisterDialog.show();
 				handle = true;
 				break;
 				
@@ -94,5 +143,19 @@ public class StartActivity extends ActionBarActivity {
 				
 			}
 		});
+	}
+
+	@Override
+	public void onTaskCompleted(String httpData) {
+		if(unregisterFlag){
+			if(httpData.contains("OK")){
+				SharedPreferencesWrapper.removFromPrefs(this, "username", username);
+				SharedPreferencesWrapper.removFromPrefs(this, "password", password);
+				unregisterFlag = false;
+				finish();
+			}
+		}
+			
+		
 	}
 }
