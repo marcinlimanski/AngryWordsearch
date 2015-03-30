@@ -35,36 +35,49 @@ public class AccountInfoActivity extends ActionBarActivity implements OnHTTPReg{
 			
 			EditText textPasswordConfirm = (EditText)this.findViewById(R.id.tbPasswordChangeConfirm);
 			passwordConfirmChange = textPasswordConfirm.getText().toString();
-			
-			if (passwordChange.equals(passwordConfirmChange)){
-				//Sending the http request to change the password
-				AlertDialog.Builder passwordChangeBuilder = new AlertDialog.Builder(AccountInfoActivity.this);
-				passwordChangeBuilder.setMessage("Are you sure you want to change your password?").setPositiveButton("OK", new DialogInterface.OnClickListener() {
-					
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						//Extracting the user credentials from shared pref class
-						String username = SharedPreferencesWrapper.getFromPrefs(AccountInfoActivity.this, "username", "");
-						String password = SharedPreferencesWrapper.getFromPrefs(AccountInfoActivity.this, "password", "");
+			if(!passwordChange.equals("") && !passwordConfirmChange.equals("")){
+				if (passwordChange.equals(passwordConfirmChange)){
+					//Sending the http request to change the password
+					AlertDialog.Builder passwordChangeBuilder = new AlertDialog.Builder(AccountInfoActivity.this);
+					passwordChangeBuilder.setMessage("Are you sure you want to change your password?").setPositiveButton("OK", new DialogInterface.OnClickListener() {
 						
-						//Debug
-						//Toast.makeText(StartActivity.this, username + "," + password, Toast.LENGTH_LONG).show();
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							//Extracting the user credentials from shared pref class
+							String username = SharedPreferencesWrapper.getFromPrefs(AccountInfoActivity.this, "username", "");
+							String password = SharedPreferencesWrapper.getFromPrefs(AccountInfoActivity.this, "password", "");
+							
+							//Debug
+							//Toast.makeText(StartActivity.this, username + "," + password, Toast.LENGTH_LONG).show();
+							
+							//Creating a ASync thread
+							//Using HttpClient to send the extracted data to register a user
+							String url = "http://08309.net.dcs.hull.ac.uk/api/admin/change?username="+username+"&oldpassword="
+							+password+"&newpassword="+passwordConfirmChange;
+							RegHTTPAsync regUser =  new RegHTTPAsync(AccountInfoActivity.this);
+							regUser.execute(url);
+							
+						}
+					});
+					AlertDialog passwordChangedDialog = passwordChangeBuilder.create();
+					passwordChangedDialog.show();
+				}
+				else{
+					AlertDialog.Builder wrongPasswordBuilder = new AlertDialog.Builder(AccountInfoActivity.this);
+					wrongPasswordBuilder.setMessage("Please check if both passwords are the same!").setPositiveButton("OK", new DialogInterface.OnClickListener() {
 						
-						//Creating a ASync thread
-						//Using HttpClient to send the extracted data to register a user
-						String url = "http://08309.net.dcs.hull.ac.uk/api/admin/change?username="+username+"&oldpassword="
-						+password+"&newpassword="+passwordConfirmChange;
-						RegHTTPAsync regUser =  new RegHTTPAsync(AccountInfoActivity.this);
-						regUser.execute(url);
-						
-					}
-				});
-				AlertDialog passwordChangedDialog = passwordChangeBuilder.create();
-				passwordChangedDialog.show();
-			}
-			else{
-				AlertDialog.Builder wrongPasswordBuilder = new AlertDialog.Builder(AccountInfoActivity.this);
-				wrongPasswordBuilder.setMessage("Please check if both passwords are the same!").setPositiveButton("OK", new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							// TODO Auto-generated method stub
+							
+						}
+					});
+					AlertDialog wrongPasswordDialog = wrongPasswordBuilder.create();
+					wrongPasswordDialog.show();
+				}
+			}else{
+				AlertDialog.Builder noPasswordBuilder = new AlertDialog.Builder(AccountInfoActivity.this);
+				noPasswordBuilder.setMessage("Please enter password!").setPositiveButton("OK", new DialogInterface.OnClickListener() {
 					
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
@@ -72,9 +85,10 @@ public class AccountInfoActivity extends ActionBarActivity implements OnHTTPReg{
 						
 					}
 				});
-				AlertDialog wrongPasswordDialog = wrongPasswordBuilder.create();
+				AlertDialog wrongPasswordDialog = noPasswordBuilder.create();
 				wrongPasswordDialog.show();
 			}
+			
 			
 		}
 	}
