@@ -52,6 +52,7 @@
         android:id="@+id/btnChangePassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:onClick="btnChangePasswordClicked"
         android:text="Change Password" />
 
 </LinearLayout>
