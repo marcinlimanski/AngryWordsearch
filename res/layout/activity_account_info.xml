@@ -8,20 +8,28 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.marcinlimanski.angrywordsearch.LogActivity" >
+    tools:context="com.marcinlimanski.angrywordsearch.AccountInfoActivity" >
 
     <TextView
         android:id="@+id/tvFullName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Username:"
+        android:text="Name"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="You can change your password here:"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
     <EditText
-        android:id="@+id/tbUserNameLog"
+        android:id="@+id/tbPasswordChange"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10" >
+        android:ems="10"
+        android:inputType="textPassword" >
 
         <requestFocus />
     </EditText>
@@ -30,21 +38,20 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Password:"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:text="Confirm password:"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <EditText
-        android:id="@+id/tbPasswordLog"
+        android:id="@+id/tbPasswordChangeConfirm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="textPassword" />
 
     <Button
-        android:id="@+id/btnLogUser"
+        android:id="@+id/btnChangePassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="btnLogUserClicked"
-        android:text="Log In" />
+        android:text="Change Password" />
 
 </LinearLayout>

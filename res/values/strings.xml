@@ -11,7 +11,6 @@
     <string name="option_logout">Log Out</string>
     <string name="option_accinfo">Account info</string>
     <string name="option_unregister">Unregister</string>
-    
-    
+    <string name="title_activity_account_info">AccountInfoActivity</string>
 
 </resources>

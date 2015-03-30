@@ -1,9 +1,15 @@
 package com.marcinlimanski.angrywordsearch;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.support.v7.app.ActionBarActivity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,6 +22,7 @@ import android.widget.Toast;
 public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 	public boolean unregisterFlag = false;
 	public boolean logOutFlag = false;
+	public boolean accInfoFlag = false;
 	private String username = "";
 	private String password = "";
 		
@@ -68,6 +75,18 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 				break;
 			
 			case R.id.option_accinfo:
+				accInfoFlag = true;
+
+				//Extracting the user credentials from shared pref class
+				username = SharedPreferencesWrapper.getFromPrefs(StartActivity.this, "username", "");
+				password = SharedPreferencesWrapper.getFromPrefs(StartActivity.this, "password", "");
+				
+				//Creating a ASync thread
+				//Using HttpClient to send the extracted data to register a user
+				String url = "http://08309.net.dcs.hull.ac.uk/api/admin/details?username="+
+				username+"&password="+password;
+				RegHTTPAsync regUser =  new RegHTTPAsync(StartActivity.this);
+				regUser.execute(url);
 				handle = true;
 				break;
 				
@@ -151,9 +170,35 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 			if(httpData.contains("OK")){
 				SharedPreferencesWrapper.removFromPrefs(this, "username", username);
 				SharedPreferencesWrapper.removFromPrefs(this, "password", password);
-				unregisterFlag = false;
 				finish();
 			}
+			unregisterFlag = false;
+		}
+		else if(accInfoFlag){
+			if(!httpData.equals("")){
+				try {
+
+					//JSON object with all data from httpData
+					JSONObject jasonObject = new JSONObject(httpData);
+					//Accessing the class attribute
+					String name = jasonObject.get("FullName").toString();
+					
+					//Creatin a new data intent to pass to new activity
+					Intent accInfoViewIntent = new Intent(this, AccountInfoActivity.class);
+					accInfoViewIntent.putExtra("fullname", name.toString());
+					startActivity(accInfoViewIntent);
+					
+					
+					
+
+					//Toast.makeText(this, name + ", " + surname, Toast.LENGTH_LONG).show();
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				accInfoFlag = false;
+			}
+			
 		}
 			
 		

@@ -40,6 +40,10 @@
             android:name=".LogActivity"
             android:label="@string/title_activity_log" >
         </activity>
+        <activity
+            android:name=".AccountInfoActivity"
+            android:label="@string/title_activity_account_info" >
+        </activity>
     </application>
 
 </manifest>
