@@ -44,6 +44,10 @@
             android:name=".AccountInfoActivity"
             android:label="@string/title_activity_account_info" >
         </activity>
+        <activity
+            android:name=".PuzzleActivity"
+            android:label="@string/title_activity_puzzle" >
+        </activity>
     </application>
 
 </manifest>

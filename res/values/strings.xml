@@ -12,5 +12,6 @@
     <string name="option_accinfo">Account info</string>
     <string name="option_unregister">Unregister</string>
     <string name="title_activity_account_info">AccountInfoActivity</string>
+    <string name="title_activity_puzzle">PuzzleActivity</string>
 
 </resources>

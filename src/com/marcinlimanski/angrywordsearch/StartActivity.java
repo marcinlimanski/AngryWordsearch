@@ -23,6 +23,7 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 	public boolean unregisterFlag = false;
 	public boolean logOutFlag = false;
 	public boolean accInfoFlag = false;
+	public boolean wordSearchFlag = false;
 	private String username = "";
 	private String password = "";
 		
@@ -35,6 +36,14 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 		registerClickCallback();
 	}
 
+	public void btnPuzzleClicked(View v){
+		if(v.getId() == R.id.btnPuzzle){
+			Intent viewPussleIntent = new Intent(this, PuzzleActivity.class);
+			startActivity(viewPussleIntent);
+			
+		}
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
