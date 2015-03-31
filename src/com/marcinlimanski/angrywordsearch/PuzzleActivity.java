@@ -4,7 +4,11 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
+import android.widget.Toast;
 
 public class PuzzleActivity extends ActionBarActivity {
 
@@ -15,7 +19,26 @@ public class PuzzleActivity extends ActionBarActivity {
 		
 		GridView puzzleGridView = (GridView) findViewById(R.id.gvPuzzle);
 		puzzleGridView.setAdapter(new PuzzleGrid(PuzzleActivity.this));
+		
+		puzzleGridView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				
+				int x = position % 12;
+				int y = position / 12;
+				int column = x + 1;
+				int row = y + 1;
+				
+	            Toast.makeText(PuzzleActivity.this, "" + row + ", " + column,
+	                    Toast.LENGTH_SHORT).show();
+			}
+	    });
+		
 	}
+	
+	
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

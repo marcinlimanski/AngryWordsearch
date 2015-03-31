@@ -9,7 +9,7 @@ import android.widget.TextView;
 public class PuzzleGrid extends BaseAdapter{
 
 	Context context;
-	String items = "abcdef";
+	String items = "RUHTCSDMTLODTWHWUIICBTCDIOGIRLDECMULTLONDENETARDTFDEIETHRODVEHWHAHTCUSLMROOTHICNHAECIUHHETDNHTDPNNIRDEIIAHNDGDFKRTDNNRLLIWFSORDNTUBFTDCDNDLHSPGA";
 	
 	public PuzzleGrid(Context c){
 		context = c;
