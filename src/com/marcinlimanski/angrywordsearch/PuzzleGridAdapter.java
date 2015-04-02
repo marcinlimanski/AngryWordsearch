@@ -1,17 +1,18 @@
 package com.marcinlimanski.angrywordsearch;
 
 import android.content.Context;
+import android.graphics.Canvas;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-public class PuzzleGrid extends BaseAdapter{
+public class PuzzleGridAdapter extends BaseAdapter{
 
 	Context context;
-	String items = "RUHTCSDMTLODTWHWUIICBTCDIOGIRLDECMULTLONDENETARDTFDEIETHRODVEHWHAHTCUSLMROOTHICNHAECIUHHETDNHTDPNNIRDEIIAHNDGDFKRTDNNRLLIWFSORDNTUBFTDCDNDLHSPGA";
+	String items = "POXESPATKSDOTWXMHBIKLIMAN";
 	
-	public PuzzleGrid(Context c){
+	public PuzzleGridAdapter(Context c){
 		context = c;
 	}
 	
@@ -39,7 +40,15 @@ public class PuzzleGrid extends BaseAdapter{
 		TextView puzzleView = new TextView(context);
 		puzzleView.setText(String.valueOf(items.charAt(position)));
 		
+		
+		
 		return puzzleView;
 	}
+	
+	
+	
+	
+	
+	
 
 }
