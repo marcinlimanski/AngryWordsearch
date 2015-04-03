@@ -15,8 +15,17 @@ import android.widget.Toast;
 public class PuzzleActivity extends ActionBarActivity {
 	PuzzleGridView puzzleGridView;
 	int columns = 5;
+	public static float startDrawX;
+	public static float startDrawY;
+	public static float endDrawX = 0;
+	public static float endDrawY = 0;
+	private boolean letterSwitch = true;
+	public static float[] pointAArray = new float[2];
+	public static float[] pointBArray = new float[2];
 	
-	
+	private int tempPos = 0;
+	public static boolean startDrawFirstPoint = false;
+	public static boolean startDrawSecondPoint = false;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -30,13 +39,29 @@ public class PuzzleActivity extends ActionBarActivity {
 		puzzleGridView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				
-				float xView = view.getLeft();
-				float yView = view.getTop();
 				
-				Toast.makeText(PuzzleActivity.this,"x: "+ xView + ", y: " + yView, Toast.LENGTH_LONG).show();
+				if(letterSwitch){
+					startDrawFirstPoint = true;
+					pointAArray[0] = view.getLeft();
+					pointAArray[1] = view.getTop();
+					puzzleGridView.invalidate();
+					letterSwitch = false;
+				}
+				else{
+					startDrawSecondPoint = true;
+					pointBArray[0] = view.getLeft();
+					pointBArray[1] = view.getTop();
+					letterSwitch = true;
+					puzzleGridView.invalidate();
+				}
+			
+					
+				
+				
+				
+				//Toast.makeText(PuzzleActivity.this,"x: "+ xView + ", y: " + yView, Toast.LENGTH_LONG).show();
 				/*
 				//Getting the column and row of given cell
 				int x = position % columns;

@@ -6,9 +6,12 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Cap;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.Toast;
 
 public class PuzzleGridView extends GridView {
 
@@ -35,18 +38,40 @@ public class PuzzleGridView extends GridView {
 		// invalidate(); // Redraws.
 		super.onDraw(canvas);
 		
-		Paint paint = new Paint();
+		if(PuzzleActivity.startDrawFirstPoint){
+			DrawPoint.SinglePoint(canvas, PuzzleActivity.pointAArray[0], PuzzleActivity.pointAArray[1]);
+			
+		}
+		if(PuzzleActivity.startDrawSecondPoint){
+			DrawPoint.SinglePoint(canvas, PuzzleActivity.pointBArray[0], PuzzleActivity.pointBArray[1]);
+		}
 		
-		paint.setColor(Color.BLUE);
-		paint.setStrokeCap(Cap.ROUND);
-		paint.setStyle(Paint.Style.STROKE);
-		paint.setStrokeJoin(Paint.Join.ROUND);
+
 		
-		paint.setStrokeWidth(60);
-		
-		
-		canvas.drawLine(404, 87, 0, 261, paint);
 	}
+
+	@Override
+	public void setOnTouchListener(OnTouchListener l) {
+		// TODO Auto-generated method stub
+		super.setOnTouchListener(l);
+	}
+
+	@Override
+	public void setOnItemClickListener(android.widget.AdapterView.OnItemClickListener listener) {
+		// TODO Auto-generated method stub
+		super.setOnItemClickListener(listener);
+		
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 
