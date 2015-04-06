@@ -26,16 +26,17 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 	public boolean wordSearchFlag = false;
 	private String username = "";
 	private String password = "";
+
 		
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_start);
-		
 		populateListView();
 		registerClickCallback();
 	}
 
+	//Button hevent for puzzle
 	public void btnPuzzleClicked(View v){
 		if(v.getId() == R.id.btnPuzzle){
 			Intent viewPussleIntent = new Intent(this, PuzzleActivity.class);
@@ -44,6 +45,7 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 		}
 	}
 	
+	//Options menu event 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -51,6 +53,7 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 		return true;
 	}
 
+	//Menu event
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle action bar item clicks here. The action bar will
@@ -138,6 +141,7 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 		return handle;
 	}
 	
+	//ListView for all puzzles 
 	private void populateListView(){
 		//Create list of items
 		String[] listOfNames = {"marcin", "hannha", "tom"};	
@@ -154,6 +158,7 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 		list.setAdapter(adapter);
 	}
 	
+	//Callback method for ListView
 	private void registerClickCallback(){
 		ListView list = (ListView) findViewById(R.id.listView1);
 		list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -172,7 +177,23 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 			}
 		});
 	}
-
+	
+	//Clicked event for Today's puzzle
+	public void btnTodaysPuzzleClicked(View v){
+		if(v.getId() == R.id.btnChangePassword){
+			
+		}
+	}
+	
+	//Clicked event for adding new puzzle
+	public void btnAddPuzzleClicked(View v){
+		if(v.getId() == R.id.btnAddPuzzle){
+			PickerDialog pickerDialog = new PickerDialog();
+			pickerDialog.show(getFragmentManager(), "date_picker");
+		}
+	}
+	
+	//AsyncTask for HTTP client 
 	@Override
 	public void onTaskCompleted(String httpData) {
 		if(unregisterFlag){

@@ -45,6 +45,9 @@ public class PuzzleGridView extends GridView {
 		if(PuzzleActivity.startDrawSecondPoint){
 			DrawPoint.SinglePoint(canvas, PuzzleActivity.pointBArray[0], PuzzleActivity.pointBArray[1]);
 		}
+		if(PuzzleActivity.clearPoints){
+			 //canvas.drawRect(0, 0, 0, 0, clearPaint); 
+		}
 		
 
 		

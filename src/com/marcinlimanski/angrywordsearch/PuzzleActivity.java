@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 public class PuzzleActivity extends ActionBarActivity {
 	PuzzleGridView puzzleGridView;
-	int columns = 5;
+	int columns = 12;
 	public static float startDrawX;
 	public static float startDrawY;
 	public static float endDrawX = 0;
@@ -26,6 +26,7 @@ public class PuzzleActivity extends ActionBarActivity {
 	private int tempPos = 0;
 	public static boolean startDrawFirstPoint = false;
 	public static boolean startDrawSecondPoint = false;
+	public static boolean clearPoints = false;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +44,8 @@ public class PuzzleActivity extends ActionBarActivity {
 				
 				
 				if(letterSwitch){
+					puzzleGridView.invalidate();
+					clearPoints = false;
 					startDrawFirstPoint = true;
 					pointAArray[0] = view.getLeft();
 					pointAArray[1] = view.getTop();
@@ -55,6 +58,7 @@ public class PuzzleActivity extends ActionBarActivity {
 					pointBArray[1] = view.getTop();
 					letterSwitch = true;
 					puzzleGridView.invalidate();
+					clearPoints= true;
 				}
 			
 					

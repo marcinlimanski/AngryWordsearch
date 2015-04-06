@@ -16,7 +16,7 @@ public class DrawPoint {
 		Paint paint = new Paint();
 		paint.setColor(Color.CYAN);;
 
-		canvas.drawCircle(startX, startY, 40, paint);
+		canvas.drawCircle(startX + 23, startY + 40, 35, paint);
 		
 	}
 	
@@ -32,6 +32,6 @@ public class DrawPoint {
 		paint.setStrokeWidth(60);
 		
 		
-		canvas.drawLine(startX, startY, endX, endY, paint);
+		canvas.drawLine(startX + 15, startY + 25, endX + 15, endY + 25, paint);
 	}
 }

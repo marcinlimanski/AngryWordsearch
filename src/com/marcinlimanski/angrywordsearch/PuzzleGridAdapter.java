@@ -10,7 +10,7 @@ import android.widget.TextView;
 public class PuzzleGridAdapter extends BaseAdapter{
 
 	Context context;
-	String items = "POXESPATKSDOTWXMHBIKLIMAN";
+	String items = "DGTRAWRNIDOPDTTFDNRIPIMOADIOHEAATBOPTIDRSAPELTWPETFPEEADREEYRUOARRTAINMCONRBAAMGDWEODLAWRPHIFAMCNCAMEEEPSOBKKYADDTIDLLENSCYTEDHATAROAAUREIRHTDSG";
 	
 	public PuzzleGridAdapter(Context c){
 		context = c;
@@ -38,6 +38,7 @@ public class PuzzleGridAdapter extends BaseAdapter{
 	public View getView(int position, View convertView, ViewGroup parent) {
 		// TODO Auto-generated method stub
 		TextView puzzleView = new TextView(context);
+		puzzleView.setTextSize(20);
 		puzzleView.setText(String.valueOf(items.charAt(position)));
 		
 		
