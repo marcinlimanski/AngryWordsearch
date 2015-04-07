@@ -1,5 +1,10 @@
 package com.marcinlimanski.angrywordsearch;
 
+import java.io.File;
+import java.io.IOException;
+
+import org.json.JSONException;
+
 import android.support.v7.app.ActionBarActivity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,6 +23,24 @@ public class MainActivity extends ActionBarActivity implements OnHTTPReg{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		try {
+			File filePathCheck = new File("/data/data/com.marcinlimanski.angrywordsearch/files/dates.json");
+			if(filePathCheck.exists()){
+				Log.i("File check: ","File dates.josn exists");
+				StartActivity.globalDates = SaveAndRestoreJSONPuzzle.RestoreJSONSates(MainActivity.this);
+			}
+			else{
+				Log.i("File check: ","Dates.json created");
+				SaveAndRestoreJSONPuzzle.createObject(MainActivity.this);
+			}
+			
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		String username = SharedPreferencesWrapper.getFromPrefs(this, "username", "");
 		if(!username.equals("")){
 			Intent startViewIntent = new Intent(this, StartActivity.class);

@@ -1,11 +1,16 @@
 package com.marcinlimanski.angrywordsearch;
 
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.support.v7.app.ActionBarActivity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,6 +31,9 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 	public boolean wordSearchFlag = false;
 	private String username = "";
 	private String password = "";
+	public static String globalDates = "";
+	
+	public static String selectedPuzzleDate = ""; 
 
 		
 	@Override
@@ -34,6 +42,8 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 		setContentView(R.layout.activity_start);
 		populateListView();
 		registerClickCallback();
+		
+		
 	}
 
 	//Button hevent for puzzle
@@ -179,17 +189,42 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 	}
 	
 	//Clicked event for Today's puzzle
-	public void btnTodaysPuzzleClicked(View v){
-		if(v.getId() == R.id.btnChangePassword){
+	public void btnTodaysPuzzleClicked(View v) throws IOException, JSONException{
+		if(v.getId() == R.id.btnTodaysPuzzle){
+			
+			String test = SaveAndRestoreJSONPuzzle.RestoreJSONSates(StartActivity.this);
+			Log.i("New dates object: ", test);
+			
 			
 		}
 	}
 	
+	
+	
 	//Clicked event for adding new puzzle
-	public void btnAddPuzzleClicked(View v){
+	public void btnAddPuzzleClicked(View v) throws JSONException, IOException{
 		if(v.getId() == R.id.btnAddPuzzle){
-			PickerDialog pickerDialog = new PickerDialog();
-			pickerDialog.show(getFragmentManager(), "date_picker");
+			//PickerDialog pickerDialog = new PickerDialog();
+			//pickerDialog.show(getFragmentManager(), "date_picker");
+			//SaveAndRestoreJSONPuzzle.SaveJSONDates("20-10-2015", StartActivity.this);
+			try {
+				SaveAndRestoreJSONPuzzle.SaveJSONDates("0-0-0", StartActivity.this);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
+			
+			Log.i("Date: ", selectedPuzzleDate);
+			
+
+			
+			
+			
 		}
 	}
 	
