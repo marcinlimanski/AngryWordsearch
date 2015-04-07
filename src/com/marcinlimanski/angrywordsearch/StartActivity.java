@@ -35,6 +35,9 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 	public boolean accInfoFlag = false;
 	public boolean wordSearchFlag = false;
 	public boolean getOldPuzzleflag = false;
+	public boolean getTodaysPuzzleflag=false;
+	public boolean assignTodaysPuzzle = false;
+	
 	private String username = "";
 	private String password = "";
 	public static String globalDates = "";
@@ -49,17 +52,26 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 	private String choosenPuzzleDate = "";
 	private String choosenPuzzleID = "";
 	
+	private String tempPuzzle = "";
+	private String tempSolution = "";
 	String[] listOfDates = {""};
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_start);
-		
 		populateListView();
 		registerClickCallback();
 		
+		//Getting user pass to use with bellow code
+		username = SharedPreferencesWrapper.getFromPrefs(StartActivity.this, "username", "");
+		password = SharedPreferencesWrapper.getFromPrefs(StartActivity.this, "password", "");
 		
+		//Assigning todays puzzle for latter user
+		String url = "http://08309.net.dcs.hull.ac.uk/api/wordsearch/current?username="+ username+ "&password=" +password;
+		RegHTTPAsync getTodaysPuzzle =  new RegHTTPAsync(StartActivity.this);
+		getTodaysPuzzle.execute(url);
+		assignTodaysPuzzle = true;
 	}
 
 	//Button hevent for puzzle
@@ -228,12 +240,16 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 	public void btnTodaysPuzzleClicked(View v) throws IOException, JSONException{
 		if(v.getId() == R.id.btnTodaysPuzzle){
 			
-			String test = SaveAndRestoreJSONPuzzle.RestoreJSONPuzzleandSolution(StartActivity.this, "2015-4-6");
-			Log.i("New puzzle object: ", test);
+			//String test = SaveAndRestoreJSONPuzzle.RestoreJSONPuzzleandSolution(StartActivity.this, "2015-4-6");
+			//Log.i("New puzzle object: ", test);
 			
-			String test1 = SaveAndRestoreJSONPuzzle.RestoreJSONSates(StartActivity.this);
-			Log.i("New dates object: ", test1);
+			//String test1 = SaveAndRestoreJSONPuzzle.RestoreJSONSates(StartActivity.this);
+			//Log.i("New dates object: ", test1);
 			
+			String url = "http://08309.net.dcs.hull.ac.uk/api/wordsearch/solution?id="+choosenPuzzleID;
+			RegHTTPAsync getTodaysPuzzleSolution =  new RegHTTPAsync(StartActivity.this);
+			getTodaysPuzzleSolution.execute(url);
+			getTodaysPuzzleflag = true;
 			
 		}
 	}
@@ -276,7 +292,7 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 	
 	//AsyncTask for HTTP client 
 	@Override
-	public void onTaskCompleted(String httpData) {
+	public void onTaskCompleted(String httpData) throws JSONException {
 		if(unregisterFlag){
 			if(httpData.contains("OK")){
 				SharedPreferencesWrapper.removFromPrefs(this, "username", username);
@@ -299,9 +315,6 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 					accInfoViewIntent.putExtra("fullname", name.toString());
 					startActivity(accInfoViewIntent);
 					
-					
-					
-
 					//Toast.makeText(this, name + ", " + surname, Toast.LENGTH_LONG).show();
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
@@ -312,18 +325,9 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 			
 		}
 		else if(getOldPuzzleflag){
-			
-			
 			try{
 				
 				if(!httpData.contains("null")){
-					//JSON object with all data from httpData
-					//JSONObject jsonObject = new JSONObject(httpData);
-					//JSONObject puzzleAndSolutions = jsonObject.getJSONObject("PuzzleAndSolution");
-					//JSONObject puzzleObject = puzzleAndSolutions.getJSONObject("Puzzle");
-					//choosenPuzzleID = puzzleObject.getString("Id");
-					//String puzzleID = PuzzleObject.getString("Id").toString();
-					//Log.i("Puzzle ID: ", choosenPuzzleID.toString());
 					
 					//Saving the puzzleAndSolution
 					try {
@@ -340,9 +344,7 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 					//If no puzzle is found then a message is displayed
 					Toast.makeText(StartActivity.this, "No puzzle avaliaable for this day yet!", Toast.LENGTH_SHORT).show();
 				}
-				
-				
-				
+	
 			}
 			catch(Exception e){
 				e.printStackTrace();
@@ -352,7 +354,55 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 			
 			getOldPuzzleflag = false;
 		}
+		else if(getTodaysPuzzleflag){
+			try{	
+				if(!httpData.contains("null")){
+					//JSON object with all data from httpData
+					//JSONObject jsonObject = new JSONObject(httpData);
+					//JSONObject puzzleAndSolutions = jsonObject.getJSONObject("Puzzle");
+					//JSONObject puzzleId = puzzleAndSolutions.getJSONObject("Id");
+					//choosenPuzzleID = puzzleId.getString("Id");
+					
+					//Log.i("Puzzle ID: ", choosenPuzzleID.toString());
+					
+					//Saving the puzzleAndSolution
+					try {
+						if(SaveAndRestoreJSONPuzzle.SaveJSONTodaysPuzzleAndSolution(StartActivity.this, tempPuzzle, httpData,choosenPuzzleDate)){
+							//If the save of the file will be sucessful then a puzzle date reference will be added 
+							SaveAndRestoreJSONPuzzle.SaveJSONDates(choosenPuzzleDate, StartActivity.this);
+						}
+					} catch (IOException e) {
+						
+						e.printStackTrace();
+					}
+				}
+				else{
+					//If no puzzle is found then a message is displayed
+					Toast.makeText(StartActivity.this, "No puzzle avaliaable for this day yet!", Toast.LENGTH_SHORT).show();
+				}
+	
+			}
+			catch(Exception e){
+				e.printStackTrace();
+			}
+			choosenPuzzleID = "";
+			choosenPuzzleDate = "";
 			
+			getTodaysPuzzleflag = false;
+		}
+		else if(assignTodaysPuzzle){
+			//Assigning temp puzzle so it can be joined with its solution 
+			tempPuzzle = httpData;
+			Log.i("Todays puzzle id:", httpData);
+			//Extracting Puzzel id
+			//JSON object with all data from httpData
+			JSONObject jsonObject = new JSONObject(httpData);
+			JSONObject puzzleObject = jsonObject.getJSONObject("Puzzle");
+			choosenPuzzleID = puzzleObject.getString("Id");
+			
+			//Log.i("Todays puzzle id:", choosenPuzzleID);
+			assignTodaysPuzzle = false;
+		}
 		
 	}
 }

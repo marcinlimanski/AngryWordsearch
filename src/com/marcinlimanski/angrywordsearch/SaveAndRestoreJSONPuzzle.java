@@ -22,6 +22,16 @@ public class SaveAndRestoreJSONPuzzle implements OnHTTPReg{
 		// TODO Auto-generated constructor stub
 	}
 	
+	public static boolean SaveJSONTodaysPuzzleAndSolution(Context context, String puzzleObject, String solutionObject ,String puzzleDate){
+		
+		Log.i("Today Puzzle: ", puzzleObject.toString());
+		
+		Log.i("Todays solution: ", solutionObject.toString());
+		
+		return false;
+		
+	}
+	
 	//Save the JSON PuzzleAndsolutio ton internal memory 
 	public static boolean SaveJSONPuzzleAndSolution(Context context, String puzzleAndSolutionObject, String puzzleDate) throws IOException{
 		
