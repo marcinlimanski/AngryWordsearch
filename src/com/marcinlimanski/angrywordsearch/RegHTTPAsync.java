@@ -10,6 +10,7 @@ import org.apache.http.StatusLine;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONException;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -26,7 +27,12 @@ public class RegHTTPAsync extends AsyncTask<String, Integer, String> {
 	//Overrdiding the methos allows us to do something when the Async task will be complete 
 	@Override
 	protected void onPostExecute(String httpData){
-		listener.onTaskCompleted(httpData);
+		try {
+			listener.onTaskCompleted(httpData);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 		
 	@SuppressWarnings("deprecation")

@@ -3,6 +3,8 @@ package com.marcinlimanski.angrywordsearch;
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.util.Calendar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -10,6 +12,7 @@ import org.json.JSONObject;
 
 import android.support.v7.app.ActionBarActivity;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -20,6 +23,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,12 +33,15 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 	public boolean logOutFlag = false;
 	public boolean accInfoFlag = false;
 	public boolean wordSearchFlag = false;
+	public boolean getOldPuzzleflag = false;
 	private String username = "";
 	private String password = "";
 	public static String globalDates = "";
 	
 	public static String selectedPuzzleDate = ""; 
 
+	DateFormat formate=DateFormat.getDateInstance();
+	Calendar calendar=Calendar.getInstance();
 		
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -199,34 +206,38 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 		}
 	}
 	
-	
-	
 	//Clicked event for adding new puzzle
 	public void btnAddPuzzleClicked(View v) throws JSONException, IOException{
 		if(v.getId() == R.id.btnAddPuzzle){
-			//PickerDialog pickerDialog = new PickerDialog();
-			//pickerDialog.show(getFragmentManager(), "date_picker");
-			//SaveAndRestoreJSONPuzzle.SaveJSONDates("20-10-2015", StartActivity.this);
-			try {
-				SaveAndRestoreJSONPuzzle.SaveJSONDates("0-0-0", StartActivity.this);
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 			
-			
-			
-			Log.i("Date: ", selectedPuzzleDate);
-			
+			setDate();
 
-			
-			
-			
 		}
 	}
+	
+	public void setDate(){
+		new DatePickerDialog(StartActivity.this, datePicker, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
+	}
+	
+	//Datepicker Dialog
+	DatePickerDialog.OnDateSetListener datePicker = new DatePickerDialog.OnDateSetListener() {
+		
+		@Override
+		public void onDateSet(DatePicker view, int year, int monthOfYear,int dayOfMonth) {
+			calendar.set(Calendar.YEAR, year);
+			calendar.set(Calendar.MONTH, monthOfYear);
+			calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+			int updatedMonth = monthOfYear + 1;
+			Log.i("Date: ",  year +"-"+updatedMonth+"-"+dayOfMonth);
+			
+			//Sending a request for the old puzzle object
+			String url = "http://08309.net.dcs.hull.ac.uk/api/wordsearch/puzzle?date=" + year +"-"+updatedMonth+"-"+dayOfMonth;
+			RegHTTPAsync getOldPuzzle =  new RegHTTPAsync(StartActivity.this);
+			getOldPuzzle.execute(url);
+			getOldPuzzleflag = true;
+			
+		}
+	};
 	
 	//AsyncTask for HTTP client 
 	@Override
@@ -264,6 +275,35 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 				accInfoFlag = false;
 			}
 			
+		}
+		else if(getOldPuzzleflag){
+			
+			
+			try{
+				
+				if(!httpData.contains("null")){
+					//JSON object with all data from httpData
+					JSONObject jsonObject = new JSONObject(httpData);
+					JSONObject puzzleAndSolutions = jsonObject.getJSONObject("PuzzleAndSolution");
+					JSONObject puzzleObject = puzzleAndSolutions.getJSONObject("Puzzle");
+					String puzzleID = puzzleObject.getString("Id");
+					//String puzzleID = PuzzleObject.getString("Id").toString();
+					Log.i("Puzzle ID: ", puzzleID.toString());
+				}
+				else{
+					//If no puzzle is found then a message is displayed
+					Toast.makeText(StartActivity.this, "No puzzle avaliaable for this day yet!", Toast.LENGTH_SHORT).show();
+				}
+				
+				
+				
+			}
+			catch(JSONException e){
+				e.printStackTrace();
+			}
+			
+			
+			getOldPuzzleflag = false;
 		}
 			
 		

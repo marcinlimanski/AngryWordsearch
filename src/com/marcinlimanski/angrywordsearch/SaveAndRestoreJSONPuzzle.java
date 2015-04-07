@@ -14,7 +14,7 @@ import org.json.JSONObject;
 import android.content.Context;
 import android.util.Log;
 
-public class SaveAndRestoreJSONPuzzle {
+public class SaveAndRestoreJSONPuzzle implements OnHTTPReg{
 	private static String allDates = "";
 	static Context contextB;
 	public SaveAndRestoreJSONPuzzle() {
@@ -102,6 +102,12 @@ public class SaveAndRestoreJSONPuzzle {
 		FileOutputStream fos = context.openFileOutput("dates.json", context.MODE_PRIVATE);
 		fos.write(newData.getBytes());
 		fos.close();
+	}
+
+	@Override
+	public void onTaskCompleted(String httpData) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
