@@ -39,10 +39,15 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 	public static String globalDates = "";
 	
 	public static String selectedPuzzleDate = ""; 
-
+	
+	//For datepicker
 	DateFormat formate=DateFormat.getDateInstance();
 	Calendar calendar=Calendar.getInstance();
 		
+	//For sending the oldpuzel meta data
+	private String choosenPuzzleDate = "";
+	private String choosenPuzzleID = "";
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -199,7 +204,7 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 	public void btnTodaysPuzzleClicked(View v) throws IOException, JSONException{
 		if(v.getId() == R.id.btnTodaysPuzzle){
 			
-			String test = SaveAndRestoreJSONPuzzle.RestoreJSONSates(StartActivity.this);
+			String test = SaveAndRestoreJSONPuzzle.RestoreJSONPuzzleandSolution(StartActivity.this, "2015-4-6");
 			Log.i("New dates object: ", test);
 			
 			
@@ -229,6 +234,9 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 			calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 			int updatedMonth = monthOfYear + 1;
 			Log.i("Date: ",  year +"-"+updatedMonth+"-"+dayOfMonth);
+			
+			//Assigning the choosen puzzle date to be pased for puzle save 
+			choosenPuzzleDate = year +"-"+updatedMonth+"-"+dayOfMonth;
 			
 			//Sending a request for the old puzzle object
 			String url = "http://08309.net.dcs.hull.ac.uk/api/wordsearch/puzzle?date=" + year +"-"+updatedMonth+"-"+dayOfMonth;
@@ -283,12 +291,20 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 				
 				if(!httpData.contains("null")){
 					//JSON object with all data from httpData
-					JSONObject jsonObject = new JSONObject(httpData);
-					JSONObject puzzleAndSolutions = jsonObject.getJSONObject("PuzzleAndSolution");
-					JSONObject puzzleObject = puzzleAndSolutions.getJSONObject("Puzzle");
-					String puzzleID = puzzleObject.getString("Id");
+					//JSONObject jsonObject = new JSONObject(httpData);
+					//JSONObject puzzleAndSolutions = jsonObject.getJSONObject("PuzzleAndSolution");
+					//JSONObject puzzleObject = puzzleAndSolutions.getJSONObject("Puzzle");
+					//choosenPuzzleID = puzzleObject.getString("Id");
 					//String puzzleID = PuzzleObject.getString("Id").toString();
-					Log.i("Puzzle ID: ", puzzleID.toString());
+					//Log.i("Puzzle ID: ", choosenPuzzleID.toString());
+					
+					//Saving the puzzleAndSolution
+					try {
+						SaveAndRestoreJSONPuzzle.SaveJSONPuzzleAndSolution(StartActivity.this, httpData, choosenPuzzleDate);
+					} catch (IOException e) {
+						
+						e.printStackTrace();
+					}
 				}
 				else{
 					//If no puzzle is found then a message is displayed
@@ -298,10 +314,11 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 				
 				
 			}
-			catch(JSONException e){
+			catch(Exception e){
 				e.printStackTrace();
 			}
-			
+			choosenPuzzleID = "";
+			choosenPuzzleDate = "";
 			
 			getOldPuzzleflag = false;
 		}

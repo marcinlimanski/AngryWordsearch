@@ -21,15 +21,54 @@ public class SaveAndRestoreJSONPuzzle implements OnHTTPReg{
 		// TODO Auto-generated constructor stub
 	}
 	
-	//Save the JSON object ton internal memory 
-	public void SaveJSONPuzzle(String puzzleObject, String solutionObject){
-
+	//Save the JSON PuzzleAndsolutio ton internal memory 
+	public static boolean SaveJSONPuzzleAndSolution(Context context, String puzzleAndSolutionObject, String puzzleDate) throws IOException{
+		
+		boolean result = false;
+		
+		try{
+			//Saving the puzzle
+			String newData = puzzleAndSolutionObject.toString();
+			FileOutputStream fos = context.openFileOutput(puzzleDate+".json", context.MODE_PRIVATE);
+			fos.write(newData.getBytes());
+			fos.close();
+			result = true;
+		}
+		catch(IOException e){
+			e.printStackTrace();
+		}
+		
+		
+		
+		return result;
+		
 		
 	}
 	
 	//Restores JSON object from internal memory
-	public void RestoreJSONPuzzle(){
+	public static String RestoreJSONPuzzleandSolution(Context context, String filePath){
+		String data = "";
+		try{
+			FileInputStream fin = context.openFileInput(filePath+".json");
+			BufferedInputStream bis = new BufferedInputStream(fin);
+			StringBuffer textBuffer = new StringBuffer();
+			while(bis.available() != 0){
+				char c  = (char)bis.read();
+				textBuffer.append(c);
+			}
+			bis.close();
+			fin.close();
+			
+			data = textBuffer.toString();
+			
+			
+			StartActivity.globalDates = textBuffer.toString();
+		}
+		catch(IOException e){
+			e.printStackTrace();
+		}
 		
+		return data;
 	}
 	
 	//Save JSONObject just for dates
