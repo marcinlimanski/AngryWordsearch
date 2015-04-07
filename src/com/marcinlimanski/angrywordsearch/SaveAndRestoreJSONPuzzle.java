@@ -23,10 +23,29 @@ public class SaveAndRestoreJSONPuzzle implements OnHTTPReg{
 	}
 	
 	public static boolean SaveJSONTodaysPuzzleAndSolution(Context context, String puzzleObject, String solutionObject ,String puzzleDate){
-		
 		Log.i("Today Puzzle: ", puzzleObject.toString());
-		
 		Log.i("Todays solution: ", solutionObject.toString());
+		try{
+			//Assigning two json object
+			JSONObject PuzzleObject = new JSONObject(puzzleObject);
+			JSONObject SolutionObject = new JSONObject(solutionObject);
+			
+			//Creating a json array to hold two object 
+			JSONArray jArray = new JSONArray();
+			jArray.put(PuzzleObject);
+			jArray.put(SolutionObject);
+			
+			//Creating new json object called PuzzleAndSolution from the above two
+			JSONObject PuzzleAndSolution = new JSONObject();
+			PuzzleAndSolution.put("PuzzleAndSolution", jArray);
+			
+			Log.i("PuzzleAndSolution: ", PuzzleAndSolution.toString());
+			
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		
 		
 		return false;
 		

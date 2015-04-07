@@ -400,7 +400,7 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 			JSONObject puzzleObject = jsonObject.getJSONObject("Puzzle");
 			choosenPuzzleID = puzzleObject.getString("Id");
 			
-			//Log.i("Todays puzzle id:", choosenPuzzleID);
+			Log.i("Todays puzzle id:", choosenPuzzleID);
 			assignTodaysPuzzle = false;
 		}
 		
