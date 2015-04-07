@@ -13,6 +13,7 @@ import org.json.JSONObject;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 public class SaveAndRestoreJSONPuzzle implements OnHTTPReg{
 	private static String allDates = "";
@@ -27,12 +28,21 @@ public class SaveAndRestoreJSONPuzzle implements OnHTTPReg{
 		boolean result = false;
 		
 		try{
-			//Saving the puzzle
-			String newData = puzzleAndSolutionObject.toString();
-			FileOutputStream fos = context.openFileOutput(puzzleDate+".json", context.MODE_PRIVATE);
-			fos.write(newData.getBytes());
-			fos.close();
-			result = true;
+			File fileCheck = new File("/data/data/com.marcinlimanski.angrywordsearch/files/"+puzzleDate+".json");
+			if(!fileCheck.exists()){
+				//Saving the puzzle
+				String newData = puzzleAndSolutionObject.toString();
+				FileOutputStream fos = context.openFileOutput(puzzleDate+".json", context.MODE_PRIVATE);
+				fos.write(newData.getBytes());
+				fos.close();
+				result = true;
+			}
+			else{
+				//Toast.makeText(contextB, "This puzzle already existis", Toast.LENGTH_SHORT).show();
+				Log.i("File: ", "Puzzle Exists");
+				result = false;
+			}
+				
 		}
 		catch(IOException e){
 			e.printStackTrace();

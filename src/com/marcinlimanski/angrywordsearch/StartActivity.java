@@ -4,6 +4,7 @@ import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import org.json.JSONArray;
@@ -48,10 +49,13 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 	private String choosenPuzzleDate = "";
 	private String choosenPuzzleID = "";
 	
+	String[] listOfDates = {""};
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_start);
+		
 		populateListView();
 		registerClickCallback();
 		
@@ -166,13 +170,33 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 	//ListView for all puzzles 
 	private void populateListView(){
 		//Create list of items
-		String[] listOfNames = {"marcin", "hannha", "tom"};	
+		ArrayList<String> puzzleDatesArray = new ArrayList<String>();
 		
+		//Accessing the list of dates
+		try {
+			String DatesObject = SaveAndRestoreJSONPuzzle.RestoreJSONSates(StartActivity.this);
+			JSONObject jasonObject = new JSONObject(DatesObject); 
+			JSONArray DatesArray = jasonObject.getJSONArray("PuzzleDates");
+			
+			for(int i =0; i<DatesArray.length(); i++){
+				JSONObject entryArray = DatesArray.getJSONObject(i);
+				Log.i("Date: ", entryArray.getString("date").toString());
+				puzzleDatesArray.add(entryArray.getString("date").toString());
+			}
+
+		} catch (IOException e) {
+			
+			e.printStackTrace();
+		} catch (JSONException e) {
+			
+			e.printStackTrace();
+		}
+
 		//build adapter 
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(
 				this, //some context for activity 
 				R.layout.data_item, //Layout to use
-				listOfNames); //Items to display
+				puzzleDatesArray); //Items to display
 		
 		
 		//Configure list view
@@ -205,7 +229,10 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 		if(v.getId() == R.id.btnTodaysPuzzle){
 			
 			String test = SaveAndRestoreJSONPuzzle.RestoreJSONPuzzleandSolution(StartActivity.this, "2015-4-6");
-			Log.i("New dates object: ", test);
+			Log.i("New puzzle object: ", test);
+			
+			String test1 = SaveAndRestoreJSONPuzzle.RestoreJSONSates(StartActivity.this);
+			Log.i("New dates object: ", test1);
 			
 			
 		}
@@ -300,7 +327,10 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 					
 					//Saving the puzzleAndSolution
 					try {
-						SaveAndRestoreJSONPuzzle.SaveJSONPuzzleAndSolution(StartActivity.this, httpData, choosenPuzzleDate);
+						if(SaveAndRestoreJSONPuzzle.SaveJSONPuzzleAndSolution(StartActivity.this, httpData, choosenPuzzleDate)){
+							//If the save of the file will be sucessful then a puzzle date reference will be added 
+							SaveAndRestoreJSONPuzzle.SaveJSONDates(choosenPuzzleDate, StartActivity.this);
+						}
 					} catch (IOException e) {
 						
 						e.printStackTrace();
