@@ -241,7 +241,14 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 				//Log.i("Puzzle loade: ", jsonPuzzleAndSolution);
 				
 				//Load choosen puzzle 
-				LoadPuzzle.InitPuzzle(jsonPuzzleAndSolution);
+				if(LoadPuzzle.InitPuzzle(jsonPuzzleAndSolution)){
+					Intent viewPussleIntent = new Intent(StartActivity.this, PuzzleActivity.class);
+					startActivity(viewPussleIntent);
+				}
+				else{
+					Toast.makeText(StartActivity.this, "Sorry, there was a problem loading the puzzle", Toast.LENGTH_SHORT).show();
+				}
+				
 				
 			}
 		});

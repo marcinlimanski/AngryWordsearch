@@ -12,13 +12,19 @@ public class LoadPuzzle {
 	public static String gridWords = "";
 	public static ArrayList<String> wordsToFindArray = new ArrayList<String>();
 	public static int gridNumberOfColumns;
+	public static String playingPuzzleSolution;
 	//Constructor
 	public LoadPuzzle() {
 		
 	}
 	
-	public static void InitPuzzle(String puzzle){
+	public static boolean InitPuzzle(String puzzle){
+		boolean result = false;
 		try{
+			playingPuzzleId = "";
+			gridWords = "";
+			gridNumberOfColumns = 0;
+			playingPuzzleSolution = "";
 			//Parsing the Array formated puzzle
 			if(StartActivity.puzzleFormatFlag){
 				//Create a global JSONObject with data
@@ -28,13 +34,18 @@ public class LoadPuzzle {
 				//Extracting the Puzzle object
 				JSONObject choosenPuzzleObject = puzzleAndSolutionArray.getJSONObject(0);
 				JSONObject targetPuzzleObject = choosenPuzzleObject.getJSONObject("Puzzle");
+				
+				//Extracting JSON Solution object
+				JSONObject choosenSolutionObject = puzzleAndSolutionArray.getJSONObject(1);
+				JSONObject playingPuzzleSolutionObject = choosenSolutionObject.getJSONObject("Solution");
+				playingPuzzleSolution = playingPuzzleSolutionObject.toString();
 				//Checking if the object puzzle has been accessed correctly 
-				Log.i("Object accessed at index 0", targetPuzzleObject.toString());
+				Log.i("Playing Puzzle Solution", playingPuzzleSolutionObject.toString());
 				
 				//Extracting the Id of the puzzle 
 				playingPuzzleId = targetPuzzleObject.getString("Id");
 				//Checking if the object puzzle has been accessed correctly 
-				Log.i("Object id", playingPuzzleId.toString());
+				//Log.i("Object id", playingPuzzleId.toString());
 				
 				//Extracting the words to find
 				JSONArray wordsArray = targetPuzzleObject.getJSONArray("Words");
@@ -51,12 +62,12 @@ public class LoadPuzzle {
 				JSONArray gridWordsArray = targetPuzzleObject.getJSONArray("Grid");
 				//Assigning the number of columns for the grid 
 				gridNumberOfColumns = gridWordsArray.length();
-				for(int i=0; i<gridWordsArray.length(); i++){
+				for(int i=gridWordsArray.length() -1; i>=0; i--){
 					
 					gridWords = gridWords + gridWordsArray.getString(i).toString();
 				}
 				
-				
+				result = true;
 
 			}
 			//Parsing the normal formated puzzle
@@ -67,14 +78,18 @@ public class LoadPuzzle {
 				//Constructing a first array that holds two objects
 				JSONObject puzzleAndSolutionPuzzle = puzzleObject.getJSONObject("PuzzleAndSolution");
 				JSONObject targetPuzzleObject = puzzleAndSolutionPuzzle.getJSONObject("Puzzle");
+
+				//Extracting JSON Solution object
+				JSONObject playingPuzzleSolutionObject = puzzleAndSolutionPuzzle.getJSONObject("Solution");
+				playingPuzzleSolution = playingPuzzleSolutionObject.toString();
 				//Checking if the object puzzle has been accessed correctly 
-				Log.i("Object accessed at index 0", targetPuzzleObject.toString());
+				Log.i("Playing Puzzle Solution", playingPuzzleSolutionObject.toString());
 				
 				
 				//Extracting the Id of the puzzle 
 				playingPuzzleId = targetPuzzleObject.getString("Id");
 				//Checking if the object puzzle has been accessed correctly 
-				Log.i("Object id", playingPuzzleId.toString());
+				//Log.i("Object id", playingPuzzleId.toString());
 				
 				//Extracting the words to find
 				JSONArray wordsArray = targetPuzzleObject.getJSONArray("Words");
@@ -91,11 +106,11 @@ public class LoadPuzzle {
 				JSONArray gridWordsArray = targetPuzzleObject.getJSONArray("Grid");
 				//Assigning the number of columns for the grid 
 				gridNumberOfColumns = gridWordsArray.length();
-				for(int i=0; i<gridWordsArray.length(); i++){
+				for(int i=gridWordsArray.length() -1; i>=0; i--){
 					
 					gridWords = gridWords + gridWordsArray.getString(i).toString();
 				}
-				
+				result = true;
 				
 			}
 			else{
@@ -106,9 +121,10 @@ public class LoadPuzzle {
 		}
 		catch(Exception e){
 			e.printStackTrace();
+			return result;
 		}
 		
-		
+		return result;
 	}
 	
 	
