@@ -23,12 +23,15 @@ public class SaveAndRestoreJSONPuzzle implements OnHTTPReg{
 	}
 	
 	public static boolean SaveJSONTodaysPuzzleAndSolution(Context context, String puzzleObject, String solutionObject ,String puzzleDate){
+		boolean result = false;
 		Log.i("Today Puzzle: ", puzzleObject.toString());
 		Log.i("Todays solution: ", solutionObject.toString());
 		try{
 			//Assigning two json object
 			JSONObject PuzzleObject = new JSONObject(puzzleObject);
 			JSONObject SolutionObject = new JSONObject(solutionObject);
+			
+			
 			
 			//Creating a json array to hold two object 
 			JSONArray jArray = new JSONArray();
@@ -39,7 +42,21 @@ public class SaveAndRestoreJSONPuzzle implements OnHTTPReg{
 			JSONObject PuzzleAndSolution = new JSONObject();
 			PuzzleAndSolution.put("PuzzleAndSolution", jArray);
 			
-			Log.i("PuzzleAndSolution: ", PuzzleAndSolution.toString());
+			//Log.i("PuzzleAndSolution: ", PuzzleAndSolution.toString());
+			File fileCheck = new File("/data/data/com.marcinlimanski.angrywordsearch/files/"+puzzleDate+ "ArrayFormat"+".json");
+			if(!fileCheck.exists()){
+				//Saving the puzzle
+				String newData = PuzzleAndSolution.toString();
+				FileOutputStream fos = context.openFileOutput(puzzleDate+ "ArrayFormat"+".json", context.MODE_PRIVATE);
+				fos.write(newData.getBytes());
+				fos.close();
+				result = true;
+				Log.i("Array Puzzle!", "Array Styeld puzzle saved");
+			}
+			else{
+				Log.i("Array Puzzle!", "Array Styeld puzzle alerady exists");
+				result = false;
+			}
 			
 		}
 		catch(Exception e){
@@ -47,7 +64,7 @@ public class SaveAndRestoreJSONPuzzle implements OnHTTPReg{
 		}
 		
 		
-		return false;
+		return result;
 		
 	}
 	
@@ -87,21 +104,45 @@ public class SaveAndRestoreJSONPuzzle implements OnHTTPReg{
 	//Restores JSON object from internal memory
 	public static String RestoreJSONPuzzleandSolution(Context context, String filePath){
 		String data = "";
+		File checkNormalFilePath = new File("/data/data/com.marcinlimanski.angrywordsearch/files/" +filePath+".json");
+		File checkArrayFilePath = new File("/data/data/com.marcinlimanski.angrywordsearch/files/"+ filePath+ "ArrayFormat"+".json");
 		try{
-			FileInputStream fin = context.openFileInput(filePath+".json");
-			BufferedInputStream bis = new BufferedInputStream(fin);
-			StringBuffer textBuffer = new StringBuffer();
-			while(bis.available() != 0){
-				char c  = (char)bis.read();
-				textBuffer.append(c);
+			if(checkNormalFilePath.exists()){
+				FileInputStream fin = context.openFileInput(filePath+".json");
+				BufferedInputStream bis = new BufferedInputStream(fin);
+				StringBuffer textBuffer = new StringBuffer();
+				while(bis.available() != 0){
+					char c  = (char)bis.read();
+					textBuffer.append(c);
+				}
+				bis.close();
+				fin.close();
+				
+				data = textBuffer.toString();
+				
+				
+				StartActivity.globalDates = textBuffer.toString();
 			}
-			bis.close();
-			fin.close();
+			else{
+				if(checkArrayFilePath.exists()){
+					FileInputStream fin = context.openFileInput(filePath+ "ArrayFormat"+".json");
+					BufferedInputStream bis = new BufferedInputStream(fin);
+					StringBuffer textBuffer = new StringBuffer();
+					while(bis.available() != 0){
+						char c  = (char)bis.read();
+						textBuffer.append(c);
+					}
+					bis.close();
+					fin.close();
+					
+					data = textBuffer.toString();
+					
+					
+					StartActivity.globalDates = textBuffer.toString();
+				}
+				Log.i("Restoring Puzzle", "Failed");
+			}
 			
-			data = textBuffer.toString();
-			
-			
-			StartActivity.globalDates = textBuffer.toString();
 		}
 		catch(IOException e){
 			e.printStackTrace();
@@ -113,7 +154,6 @@ public class SaveAndRestoreJSONPuzzle implements OnHTTPReg{
 	//Save JSONObject just for dates
 	public static void SaveJSONDates(String puzzleDate, Context context) throws JSONException, IOException{
 	
-		Log.i("File: ", "exists");
 		Log.i("raw globalDates", StartActivity.globalDates);
 		
 		JSONObject jsonObjMain = new JSONObject(StartActivity.globalDates); //Your existing object

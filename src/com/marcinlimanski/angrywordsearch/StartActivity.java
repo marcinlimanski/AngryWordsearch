@@ -72,6 +72,8 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 		RegHTTPAsync getTodaysPuzzle =  new RegHTTPAsync(StartActivity.this);
 		getTodaysPuzzle.execute(url);
 		assignTodaysPuzzle = true;
+		
+		Log.i("On create global date", globalDates);
 	}
 
 	//Button hevent for puzzle
@@ -227,10 +229,11 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 				TextView textView = (TextView) viewClicked;
 				
 				//Building a string 
-				String message = "You clicked #:" + position + ", which string is: " + textView.getText().toString();
+				String puzzleName = textView.getText().toString();
+				String jsonPuzzleAndSolution = SaveAndRestoreJSONPuzzle.RestoreJSONPuzzleandSolution(StartActivity.this, puzzleName);
 				
-				//Displaying the message 
-				Toast.makeText(StartActivity.this, message, Toast.LENGTH_LONG).show();
+				//Load choosen puzzle 
+				Log.i("Puzzle loade: ", jsonPuzzleAndSolution);
 				
 			}
 		});
@@ -291,6 +294,7 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 	};
 	
 	//AsyncTask for HTTP client 
+	
 	@Override
 	public void onTaskCompleted(String httpData) throws JSONException {
 		if(unregisterFlag){
@@ -334,6 +338,9 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 						if(SaveAndRestoreJSONPuzzle.SaveJSONPuzzleAndSolution(StartActivity.this, httpData, choosenPuzzleDate)){
 							//If the save of the file will be sucessful then a puzzle date reference will be added 
 							SaveAndRestoreJSONPuzzle.SaveJSONDates(choosenPuzzleDate, StartActivity.this);
+							String test1 = SaveAndRestoreJSONPuzzle.RestoreJSONSates(StartActivity.this);
+							Log.i("Dates Array after updating", globalDates);
+							Log.i("Dates Array after updating", test1.toString());
 						}
 					} catch (IOException e) {
 						
@@ -349,7 +356,6 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 			catch(Exception e){
 				e.printStackTrace();
 			}
-			choosenPuzzleID = "";
 			choosenPuzzleDate = "";
 			
 			getOldPuzzleflag = false;
@@ -357,19 +363,18 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 		else if(getTodaysPuzzleflag){
 			try{	
 				if(!httpData.contains("null")){
-					//JSON object with all data from httpData
-					//JSONObject jsonObject = new JSONObject(httpData);
-					//JSONObject puzzleAndSolutions = jsonObject.getJSONObject("Puzzle");
-					//JSONObject puzzleId = puzzleAndSolutions.getJSONObject("Id");
-					//choosenPuzzleID = puzzleId.getString("Id");
+					int year = calendar.get(Calendar.YEAR);
+					int m = calendar.get(Calendar.MONTH);
+					int month = m +1;
+					int day = calendar.get(Calendar.DAY_OF_MONTH);
 					
-					//Log.i("Puzzle ID: ", choosenPuzzleID.toString());
+					String todaysPuzzleDate = String.valueOf(year) + "-" + String.valueOf(month) + "-"+ String.valueOf(day);
 					
 					//Saving the puzzleAndSolution
 					try {
-						if(SaveAndRestoreJSONPuzzle.SaveJSONTodaysPuzzleAndSolution(StartActivity.this, tempPuzzle, httpData,choosenPuzzleDate)){
+						if(SaveAndRestoreJSONPuzzle.SaveJSONTodaysPuzzleAndSolution(StartActivity.this, tempPuzzle, httpData, todaysPuzzleDate)){
 							//If the save of the file will be sucessful then a puzzle date reference will be added 
-							SaveAndRestoreJSONPuzzle.SaveJSONDates(choosenPuzzleDate, StartActivity.this);
+							SaveAndRestoreJSONPuzzle.SaveJSONDates(todaysPuzzleDate, StartActivity.this);
 						}
 					} catch (IOException e) {
 						
@@ -385,7 +390,6 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 			catch(Exception e){
 				e.printStackTrace();
 			}
-			choosenPuzzleID = "";
 			choosenPuzzleDate = "";
 			
 			getTodaysPuzzleflag = false;
