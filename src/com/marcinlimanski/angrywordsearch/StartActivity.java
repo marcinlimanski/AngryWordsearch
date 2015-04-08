@@ -345,7 +345,7 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 		else if(getOldPuzzleflag){
 			try{
 				
-				if(!httpData.contains("null")){
+				if(!httpData.contains("null") && !httpData.equals("")){
 					
 					//Saving the puzzleAndSolution
 					try {

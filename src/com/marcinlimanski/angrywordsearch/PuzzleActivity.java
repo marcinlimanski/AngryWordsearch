@@ -129,7 +129,7 @@ public class PuzzleActivity extends ActionBarActivity {
 	
 	public boolean CheckWord(int columnOne, int rowOne, int columnTwo, int rowTwo){
 		boolean result = false;
-
+		
 		try {
 			//Constructing the Json Solution object
 			JSONObject jsonObject = new JSONObject(LoadPuzzle.playingPuzzleSolution);
