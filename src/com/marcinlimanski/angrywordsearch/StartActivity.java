@@ -337,9 +337,10 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 					try {
 						if(SaveAndRestoreJSONPuzzle.SaveJSONPuzzleAndSolution(StartActivity.this, httpData, choosenPuzzleDate)){
 							//If the save of the file will be sucessful then a puzzle date reference will be added 
+							Log.i("Dates Array ", globalDates);
 							SaveAndRestoreJSONPuzzle.SaveJSONDates(choosenPuzzleDate, StartActivity.this);
 							String test1 = SaveAndRestoreJSONPuzzle.RestoreJSONSates(StartActivity.this);
-							Log.i("Dates Array after updating", globalDates);
+							
 							Log.i("Dates Array after updating", test1.toString());
 						}
 					} catch (IOException e) {
@@ -356,7 +357,6 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 			catch(Exception e){
 				e.printStackTrace();
 			}
-			choosenPuzzleDate = "";
 			
 			getOldPuzzleflag = false;
 		}
@@ -390,7 +390,6 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 			catch(Exception e){
 				e.printStackTrace();
 			}
-			choosenPuzzleDate = "";
 			
 			getTodaysPuzzleflag = false;
 		}

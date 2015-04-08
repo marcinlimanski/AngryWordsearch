@@ -121,7 +121,7 @@ public class SaveAndRestoreJSONPuzzle implements OnHTTPReg{
 				data = textBuffer.toString();
 				
 				
-				StartActivity.globalDates = textBuffer.toString();
+
 			}
 			else{
 				if(checkArrayFilePath.exists()){
@@ -138,7 +138,7 @@ public class SaveAndRestoreJSONPuzzle implements OnHTTPReg{
 					data = textBuffer.toString();
 					
 					
-					StartActivity.globalDates = textBuffer.toString();
+
 				}
 				Log.i("Restoring Puzzle", "Failed");
 			}
