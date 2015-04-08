@@ -150,6 +150,23 @@ public class PuzzleActivity extends ActionBarActivity {
 				//Switch for diffrent directions, will return the Column and Row of given letter
 				switch(direction){
 					case 0:
+						//Coords of first letter
+						int tempColumOneD0 = Column;
+						int tempRowOneD0 =Row;
+						//Coords of second letter
+						int tempColumTwoD0 = Column - (wordLength -1);
+						int tempRowTwoD0 = Row - (wordLength -1);
+						Log.i("Direction 0", wordSolution.getString("Word").toString() +" : "+tempColumOneD0 + ", " + tempRowOneD0 + ", " + tempColumTwoD0 + ", " + tempRowTwoD0);
+						
+						if(tempColumOneD0 == columnOne && tempRowOneD0 == rowOne && tempColumTwoD0 == columnTwo && tempRowTwoD0 == rowTwo){
+							Log.i("Puzzle found!", "Puzzle found");
+							result = true; 
+						}
+						//Checking diffrent direction
+						else if(tempColumOneD0 == columnTwo && tempRowOneD0 == rowTwo && tempColumTwoD0 == columnOne && tempRowTwoD0 == rowOne){
+							Log.i("Puzzle found!", "Puzzle found");
+							result = true; 
+						}
 						break;
 						
 					case 1:
@@ -186,9 +203,41 @@ public class PuzzleActivity extends ActionBarActivity {
 						break;
 						
 					case 3: 
+						int tempColumOneD3 = Column;
+						int tempRowOneD3 =Row;
+						//Coords of second letter
+						int tempColumTwoD3 = Column - (wordLength -1);
+						int tempRowTwoD3 = Row;
+						Log.i("Direction 3", wordSolution.getString("Word").toString() +" : "+tempColumOneD3 + ", " + tempRowOneD3 + ", " + tempColumTwoD3 + ", " + tempRowTwoD3);
+						
+						if(tempColumOneD3 == columnOne && tempRowOneD3 == rowOne && tempColumTwoD3 == columnTwo && tempRowTwoD3 == rowTwo){
+							Log.i("Puzzle found!", "Puzzle found");
+							result = true; 
+						}
+						//Checking diffrent direction
+						else if(tempColumOneD3 == columnTwo && tempRowOneD3 == rowTwo && tempColumTwoD3 == columnOne && tempRowTwoD3 == rowOne){
+							Log.i("Puzzle found!", "Puzzle found");
+							result = true; 
+						}
 						break;
 						
 					case 4: 
+						int tempColumOneD4 = Column;
+						int tempRowOneD4 =Row;
+						//Coords of second letter
+						int tempColumTwoD4 = Column + (wordLength);
+						int tempRowTwoD4 = Row;
+						Log.i("Direction 4", wordSolution.getString("Word").toString() +" : "+tempColumOneD4+ ", " + tempRowOneD4 + ", " + tempColumTwoD4 + ", " + tempRowTwoD4);
+						
+						if(tempColumOneD4 == columnOne && tempRowOneD4 == rowOne && tempColumTwoD4 == columnTwo && tempRowTwoD4 == rowTwo){
+							Log.i("Puzzle found!", "Puzzle found");
+							result = true; 
+						}
+						//Checking diffrent direction
+						else if(tempColumOneD4 == columnTwo && tempRowOneD4 == rowTwo && tempColumTwoD4 == columnOne && tempRowTwoD4 == rowOne){
+							Log.i("Puzzle found!", "Puzzle found");
+							result = true; 
+						}
 						break;
 						
 					case 5: 
@@ -236,7 +285,7 @@ public class PuzzleActivity extends ActionBarActivity {
 						int tempRowOneD7 =Row;
 						//Coords of second letter
 						int tempColumTwoD7 = Column + (wordLength -1);
-						int tempRowTwoD7 = Row - (wordLength -1);
+						int tempRowTwoD7 = Row + (wordLength -1);
 						Log.i("Direction 7", wordSolution.getString("Word").toString() +" : "+tempColumOneD7 + ", " + tempRowOneD7 + ", " + tempColumTwoD7 + ", " + tempRowTwoD7);
 						
 						if(tempColumOneD7 == columnOne && tempRowOneD7 == rowOne && tempColumTwoD7 == columnTwo && tempRowTwoD7 == rowTwo){
