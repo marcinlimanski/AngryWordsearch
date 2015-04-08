@@ -119,7 +119,7 @@ public class SaveAndRestoreJSONPuzzle implements OnHTTPReg{
 				fin.close();
 				
 				data = textBuffer.toString();
-				
+				StartActivity.puzzleFormatFlag = false;
 				
 
 			}
@@ -136,6 +136,7 @@ public class SaveAndRestoreJSONPuzzle implements OnHTTPReg{
 					fin.close();
 					
 					data = textBuffer.toString();
+					StartActivity.puzzleFormatFlag = true;
 					
 					
 

@@ -52,6 +52,10 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 	private String choosenPuzzleDate = "";
 	private String choosenPuzzleID = "";
 	
+	//Global flag for setting the puzzle format type
+	//False - normal format, True - array format 
+	public static boolean puzzleFormatFlag = false;
+	
 	private String tempPuzzle = "";
 	private String tempSolution = "";
 	String[] listOfDates = {""};
@@ -196,6 +200,7 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 				JSONObject entryArray = DatesArray.getJSONObject(i);
 				Log.i("Date: ", entryArray.getString("date").toString());
 				puzzleDatesArray.add(entryArray.getString("date").toString());
+
 			}
 
 		} catch (IOException e) {
@@ -232,8 +237,11 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 				String puzzleName = textView.getText().toString();
 				String jsonPuzzleAndSolution = SaveAndRestoreJSONPuzzle.RestoreJSONPuzzleandSolution(StartActivity.this, puzzleName);
 				
+				//Check if the puzzle loaded correctly 
+				//Log.i("Puzzle loade: ", jsonPuzzleAndSolution);
+				
 				//Load choosen puzzle 
-				Log.i("Puzzle loade: ", jsonPuzzleAndSolution);
+				LoadPuzzle.InitPuzzle(jsonPuzzleAndSolution);
 				
 			}
 		});
@@ -294,7 +302,6 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 	};
 	
 	//AsyncTask for HTTP client 
-	
 	@Override
 	public void onTaskCompleted(String httpData) throws JSONException {
 		if(unregisterFlag){

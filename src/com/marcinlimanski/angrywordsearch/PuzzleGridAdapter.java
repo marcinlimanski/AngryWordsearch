@@ -10,7 +10,7 @@ import android.widget.TextView;
 public class PuzzleGridAdapter extends BaseAdapter{
 
 	Context context;
-	String items = "DGTRAWRNIDOPDTTFDNRIPIMOADIOHEAATBOPTIDRSAPELTWPETFPEEADREEYRUOARRTAINMCONRBAAMGDWEODLAWRPHIFAMCNCAMEEEPSOBKKYADDTIDLLENSCYTEDHATAROAAUREIRHTDSG";
+	String items = LoadPuzzle.gridWords;
 	
 	public PuzzleGridAdapter(Context c){
 		context = c;

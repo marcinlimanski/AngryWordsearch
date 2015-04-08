@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 public class PuzzleActivity extends ActionBarActivity {
 	PuzzleGridView puzzleGridView;
-	int columns = 12;
+	int columns = LoadPuzzle.gridNumberOfColumns;
 	public static float startDrawX;
 	public static float startDrawY;
 	public static float endDrawX = 0;
