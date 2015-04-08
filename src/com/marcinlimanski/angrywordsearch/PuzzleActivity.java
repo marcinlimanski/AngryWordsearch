@@ -35,6 +35,21 @@ public class PuzzleActivity extends ActionBarActivity {
 	public static boolean clearPoints = false;
 	int posA = 0;
 	int posB = 0;
+	
+	//Getting the column and row of given cell
+	int x ;
+	int y;
+	int column;
+	int numRows;
+	int row;
+	
+	//Getting the column and row of given cell
+	int x2;
+	int y2;
+	int column2;
+	int numRows2;
+	int row2;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -52,7 +67,9 @@ public class PuzzleActivity extends ActionBarActivity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				
-				/*
+				//This will give me the row and collumn of given cell 
+				//Toast.makeText(PuzzleActivity.this, "Column: "+column + ", Row:" + row, Toast.LENGTH_SHORT).show();
+				
 				if(letterSwitch){
 					puzzleGridView.invalidate();
 					clearPoints = false;
@@ -61,7 +78,13 @@ public class PuzzleActivity extends ActionBarActivity {
 					pointAArray[1] = view.getTop();
 					puzzleGridView.invalidate();
 					letterSwitch = false;
-					posA = position;
+					
+					//Extracting the column and row of givven cell 
+					x = position % columns;
+					y = position / columns;
+					column = x;
+					numRows = (int) Math.ceil(puzzleGridView.getCount()/columns) -1;
+					row = (y - numRows) * -1;
 				}
 				else{
 					startDrawSecondPoint = true;
@@ -70,30 +93,29 @@ public class PuzzleActivity extends ActionBarActivity {
 					letterSwitch = true;
 					puzzleGridView.invalidate();
 					clearPoints= true;
-					posB = position;
-					//Toast.makeText(PuzzleActivity.this, "A: "+posA + ", B:" + posB, Toast.LENGTH_SHORT).show();
+
+					//Getting the column and row of given cell
+					x2 = position % columns;
+					y2 = position / columns;
+					column2 = x2;
+					numRows2 = (int) Math.ceil(puzzleGridView.getCount()/columns) -1;
+					row2 = (y2 - numRows2) * -1;
+					
+					//Checking the col and row 
+					Log.i("ROW and COl", "A: " + column + ", " + row + " B: " + column2 + ", " + row2);
+					
+					//Preform the check
+					if(CheckWord(column, row, column2, row2)){
+						Log.i("WOWOWOWOW", "Puzzle found");
+					}
 				}
-				*/
-			
+
 				
 				
-				
-				
-				//Toast.makeText(PuzzleActivity.this,"x: "+ xView + ", y: " + yView, Toast.LENGTH_LONG).show();
-				
-				//Getting the column and row of given cell
-				int x = position % columns;
-				int y = position / columns;
-				int column = x;
-				int numRows = (int) Math.ceil(puzzleGridView.getCount()/columns) -1;
-				int row = y - numRows;
-				
-				
-				Toast.makeText(PuzzleActivity.this, "Column: "+column + ", Row:" + row, Toast.LENGTH_SHORT).show();
 				
 				//Extracting the index of a given cell 
-				int index = x + y * columns;
-				String item = puzzleGridView.getItemAtPosition(index).toString();
+				//int index = x + y * columns;
+				//String item = puzzleGridView.getItemAtPosition(index).toString();
 				
 
 				
@@ -105,8 +127,9 @@ public class PuzzleActivity extends ActionBarActivity {
 		
 	}
 	
-	public ArrayList<Integer> CheckWord(){
-		ArrayList<Integer> result = new ArrayList<Integer>();
+	public boolean CheckWord(int columnOne, int rowOne, int columnTwo, int rowTwo){
+		boolean result = false;
+
 		try {
 			//Constructing the Json Solution object
 			JSONObject jsonObject = new JSONObject(LoadPuzzle.playingPuzzleSolution);
@@ -131,14 +154,35 @@ public class PuzzleActivity extends ActionBarActivity {
 						
 					case 1:
 						//Coords of first letter
-						result.add(Column);
-						result.add(Row);
+						int tempColumOneD1 = Column;
+						int tempRowOneD1 =Row;
 						//Coords of second letter
-						result.add(Column - wordLength);
-						result.add(Row);
+						int tempColumTwoD1 = Column - wordLength;
+						int tempRowTwoD1 = Row;
+						if(tempColumOneD1 == columnOne && tempRowOneD1 == rowOne && tempColumTwoD1 == columnTwo && tempRowTwoD1 == rowTwo){
+							Log.i("Puzzle found!", "Puzzle found");
+							result = true; 
+						}
 						break;
 						
 					case 2: 
+						//Coords of first letter
+						int tempColumOneD2 = Column;
+						int tempRowOneD2 =Row;
+						//Coords of second letter
+						int tempColumTwoD2 = Column + (wordLength -1);
+						int tempRowTwoD2 = Row - (wordLength -1);
+						Log.i("Direction 2", wordSolution.getString("Word").toString() +" : "+tempColumOneD2 + ", " + tempRowOneD2 + ", " + tempColumTwoD2 + ", " + tempRowTwoD2);
+						
+						if(tempColumOneD2 == columnOne && tempRowOneD2 == rowOne && tempColumTwoD2 == columnTwo && tempRowTwoD2 == rowTwo){
+							Log.i("Puzzle found!", "Puzzle found");
+							result = true; 
+						}
+						//Checking diffrent direction
+						else if(tempColumOneD2 == columnTwo && tempRowOneD2 == rowTwo && tempColumTwoD2 == columnOne && tempRowTwoD2 == rowOne){
+							Log.i("Puzzle found!", "Puzzle found");
+							result = true; 
+						}
 						break;
 						
 					case 3: 
@@ -149,14 +193,61 @@ public class PuzzleActivity extends ActionBarActivity {
 						
 					case 5: 
 						//Coords of first letter
-						result.add(Column);
-						result.add(Row);
+						int tempColumOneD5 = Column;
+						int tempRowOneD5 =Row;
 						//Coords of second letter
-						result.add(Column - wordLength);
-						result.add(Row - wordLength);
+						int tempColumTwoD5 = Column - (wordLength -1);
+						int tempRowTwoD5 = Row + (wordLength -1);
+						Log.i("Direction 5", wordSolution.getString("Word").toString() +" : "+tempColumOneD5 + ", " + tempRowOneD5 + ", " + tempColumTwoD5 + ", " + tempRowTwoD5);
+						
+						if(tempColumOneD5 == columnOne && tempRowOneD5 == rowOne && tempColumTwoD5 == columnTwo && tempRowTwoD5 == rowTwo){
+							Log.i("Puzzle found!", "Puzzle found");
+							result = true; 
+						}
+						//Checking diffrent direction
+						else if(tempColumOneD5 == columnTwo && tempRowOneD5 == rowTwo && tempColumTwoD5 == columnOne && tempRowTwoD5 == rowOne){
+							Log.i("Puzzle found!", "Puzzle found");
+							result = true; 
+						}
 						break;
 						
 					case 6: 
+						//Coords of first letter
+						int tempColumOneD6 = Column;
+						int tempRowOneD6 =Row;
+						//Coords of second letter
+						int tempColumTwoD6 = Column;
+						int tempRowTwoD6 = Row + (wordLength -1);
+						Log.i("Direction 6", wordSolution.getString("Word").toString() +" : "+tempColumOneD6 + ", " + tempRowOneD6 + ", " + tempColumTwoD6 + ", " + tempRowTwoD6);
+						
+						if(tempColumOneD6 == columnOne && tempRowOneD6 == rowOne && tempColumTwoD6 == columnTwo && tempRowTwoD6 == rowTwo){
+							Log.i("Puzzle found!", "Puzzle found");
+							result = true; 
+						}
+						//Checking diffrent direction
+						else if(tempColumOneD6 == columnTwo && tempRowOneD6 == rowTwo && tempColumTwoD6 == columnOne && tempRowTwoD6 == rowOne){
+							Log.i("Puzzle found!", "Puzzle found");
+							result = true; 
+						}
+						break;
+					case 7:
+						//Coords of first letter
+						int tempColumOneD7 = Column;
+						int tempRowOneD7 =Row;
+						//Coords of second letter
+						int tempColumTwoD7 = Column + (wordLength -1);
+						int tempRowTwoD7 = Row - (wordLength -1);
+						Log.i("Direction 7", wordSolution.getString("Word").toString() +" : "+tempColumOneD7 + ", " + tempRowOneD7 + ", " + tempColumTwoD7 + ", " + tempRowTwoD7);
+						
+						if(tempColumOneD7 == columnOne && tempRowOneD7 == rowOne && tempColumTwoD7 == columnTwo && tempRowTwoD7 == rowTwo){
+							Log.i("Puzzle found!", "Puzzle found");
+							result = true; 
+						}
+						//Checking diffrent direction
+						else if(tempColumOneD7 == columnTwo && tempRowOneD7 == rowTwo && tempColumTwoD7 == columnOne && tempRowTwoD7 == rowOne){
+							Log.i("Puzzle found!", "Puzzle found");
+							result = true; 
+						}
 						break;
 				
 					default: 
