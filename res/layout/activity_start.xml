@@ -11,7 +11,7 @@
     <ListView
         android:id="@+id/listView1"
         android:layout_width="400dip"
-        android:layout_height="200dip"
+        android:layout_height="350dip"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true" >
     </ListView>
@@ -21,28 +21,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/listView1"
-        android:layout_centerVertical="true"
+        android:layout_alignParentBottom="true"
         android:onClick="btnTodaysPuzzleClicked"
         android:text="Todays Puzzle" />
-
-    <Button
-        android:id="@+id/btnPuzzle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/btnTodaysPuzzle"
-        android:layout_below="@+id/btnTodaysPuzzle"
-        android:onClick="btnPuzzleClicked"
-        android:text="Puzzle" />
 
     <Button
         android:id="@+id/btnAddPuzzle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/btnPuzzle"
-        android:layout_marginLeft="24dp"
-        android:layout_toRightOf="@+id/btnTodaysPuzzle"
+        android:layout_alignBaseline="@+id/btnTodaysPuzzle"
+        android:layout_alignBottom="@+id/btnTodaysPuzzle"
+        android:layout_alignRight="@+id/listView1"
         android:onClick="btnAddPuzzleClicked"
         android:text="Add Puzzle" />
- 
 
 </RelativeLayout>

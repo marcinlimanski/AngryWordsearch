@@ -41,6 +41,6 @@ public class DrawPoint {
 		paint.setStrokeWidth(60);
 		
 		
-		canvas.drawLine(startX + 15, startY + 25, endX + 15, endY + 25, paint);
+		canvas.drawLine(startX + 23, startY + 40, endX + 23, endY + 40, paint);
 	}
 }

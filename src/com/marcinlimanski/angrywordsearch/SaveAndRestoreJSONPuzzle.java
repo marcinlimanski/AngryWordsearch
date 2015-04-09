@@ -68,34 +68,28 @@ public class SaveAndRestoreJSONPuzzle implements OnHTTPReg{
 		
 	}
 	
-	public static boolean SaveWordsFound(Context context, String fileNme, String wordsFoundObject){
-		boolean result = false;
+	public static  void SaveWordsFound(Context context, String fileNme, String wordsFoundObject){
+		
 		try{
-			File fileCheck = new File("/data/data/com.marcinlimanski.angrywordsearch/files/"+fileNme+"WordsFound.json");
-			if(!fileCheck.exists()){
+
 				//Saving the puzzle
 				String newData = wordsFoundObject.toString();
 				FileOutputStream fos = context.openFileOutput(fileNme+"WordsFound.json", context.MODE_PRIVATE);
 				fos.write(newData.getBytes());
 				fos.close();
-				result = true;
-			}
-			else{
-				//Toast.makeText(contextB, "This puzzle already existis", Toast.LENGTH_SHORT).show();
-				Log.i("File: ", "WordsFound file Exists");
-				result = false;
-			}
+
+		
 				
 		}
 		catch(IOException e){
 			e.printStackTrace();
 		}
-		return result;
+	
 	}
 	
 	
 	//Restores JSON object from internal memory
-		public static String RestoreFoundWords(Context context, String fileName){
+	public static String RestoreFoundWords(Context context, String fileName){
 			String data = "";
 			File checkFilePath = new File("/data/data/com.marcinlimanski.angrywordsearch/files/"+fileName+"WordsFound.json");
 			try{

@@ -82,15 +82,6 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 		Log.i("On create global date", globalDates);
 	}
 
-	//Button hevent for puzzle
-	public void btnPuzzleClicked(View v){
-		if(v.getId() == R.id.btnPuzzle){
-			Intent viewPussleIntent = new Intent(this, PuzzleActivity.class);
-			startActivity(viewPussleIntent);
-			
-		}
-	}
-	
 	//Options menu event 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -228,6 +219,7 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 	//Callback method for ListView
 	private void registerClickCallback(){
 		ListView list = (ListView) findViewById(R.id.listView1);
+		list.setTextAlignment(TEXT_ALIGNMENT_CENTER );
 		list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
 			@Override
@@ -252,6 +244,8 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 				}
 				
 				
+				
+				
 			}
 		});
 	}
@@ -259,16 +253,39 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 	//Clicked event for Today's puzzle
 	public void btnTodaysPuzzleClicked(View v) throws IOException, JSONException{
 		if(v.getId() == R.id.btnTodaysPuzzle){
+			int year = calendar.get(Calendar.YEAR);
+			int m = calendar.get(Calendar.MONTH);
+			int month = m +1;
+			int day = calendar.get(Calendar.DAY_OF_MONTH);
 			
-			//String test = SaveAndRestoreJSONPuzzle.RestoreJSONPuzzleandSolution(StartActivity.this, "2015-4-6");
-			//Log.i("New puzzle object: ", test);
+			String todaysPuzzleDate = String.valueOf(year) + "-" + String.valueOf(month) + "-"+ String.valueOf(day);
+			//setting name for the found words file
+			puzzleName = todaysPuzzleDate;
+
+			if(!SaveAndRestoreJSONPuzzle.RestoreJSONPuzzleandSolution(StartActivity.this, todaysPuzzleDate).equals("")){
+				//Loading the puzzle
+				String jsonPuzzleAndSolution = SaveAndRestoreJSONPuzzle.RestoreJSONPuzzleandSolution(StartActivity.this, puzzleName);
+				//Load choosen puzzle 
+				if(LoadPuzzle.InitPuzzle(jsonPuzzleAndSolution)){
+					Intent viewPussleIntent = new Intent(StartActivity.this, PuzzleActivity.class);
+					startActivity(viewPussleIntent);
+				}
+				else{
+					Toast.makeText(StartActivity.this, "Sorry, there was a problem loading the puzzle", Toast.LENGTH_SHORT).show();
+				}
+			}
+			else{
+				//String test1 = SaveAndRestoreJSONPuzzle.RestoreJSONSates(StartActivity.this);
+				//Log.i("New dates object: ", test1);
+				String url = "http://08309.net.dcs.hull.ac.uk/api/wordsearch/solution?id="+choosenPuzzleID;
+				RegHTTPAsync getTodaysPuzzleSolution =  new RegHTTPAsync(StartActivity.this);
+				getTodaysPuzzleSolution.execute(url);
+				getTodaysPuzzleflag = true;
+			}
 			
-			//String test1 = SaveAndRestoreJSONPuzzle.RestoreJSONSates(StartActivity.this);
-			//Log.i("New dates object: ", test1);
-			String url = "http://08309.net.dcs.hull.ac.uk/api/wordsearch/solution?id="+choosenPuzzleID;
-			RegHTTPAsync getTodaysPuzzleSolution =  new RegHTTPAsync(StartActivity.this);
-			getTodaysPuzzleSolution.execute(url);
-			getTodaysPuzzleflag = true;
+			
+			
+			
 			
 		}
 	}
@@ -355,7 +372,7 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 							Log.i("Dates Array ", globalDates);
 							SaveAndRestoreJSONPuzzle.SaveJSONDates(choosenPuzzleDate, StartActivity.this);
 							String test1 = SaveAndRestoreJSONPuzzle.RestoreJSONSates(StartActivity.this);
-							
+							populateListView();
 							Log.i("Dates Array after updating", test1.toString());
 						}
 					} catch (IOException e) {
@@ -391,6 +408,18 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 						if(SaveAndRestoreJSONPuzzle.SaveJSONTodaysPuzzleAndSolution(StartActivity.this, tempPuzzle, httpData, todaysPuzzleDate)){
 							//If the save of the file will be sucessful then a puzzle date reference will be added 
 							SaveAndRestoreJSONPuzzle.SaveJSONDates(todaysPuzzleDate, StartActivity.this);
+							populateListView();
+							//Loading the puzzle
+							String jsonPuzzleAndSolution = SaveAndRestoreJSONPuzzle.RestoreJSONPuzzleandSolution(StartActivity.this, puzzleName);
+							//Load choosen puzzle 
+							if(LoadPuzzle.InitPuzzle(jsonPuzzleAndSolution)){
+								Intent viewPussleIntent = new Intent(StartActivity.this, PuzzleActivity.class);
+								startActivity(viewPussleIntent);
+							}
+							else{
+								Toast.makeText(StartActivity.this, "Sorry, there was a problem loading the puzzle", Toast.LENGTH_SHORT).show();
+							}
+							
 						}
 					} catch (IOException e) {
 						

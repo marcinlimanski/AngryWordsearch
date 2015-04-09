@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class PuzzleActivity extends ActionBarActivity {
@@ -28,6 +29,7 @@ public class PuzzleActivity extends ActionBarActivity {
 	private boolean letterSwitch = true;
 	public static float[] pointAArray = new float[2];
 	public static float[] pointBArray = new float[2];
+	
 	
 	private int tempPos = 0;
 	public static boolean startDrawFirstPoint = false;
@@ -50,14 +52,26 @@ public class PuzzleActivity extends ActionBarActivity {
 	int numRows2;
 	int row2;
 	
+	TextView TVWordsToFind;
+	
 	//Handeling found words 
 	String tempWordFound = "";
 	public static String jsonFoundWordsObject = "";
+
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_puzzle);
+		TVWordsToFind = (TextView)findViewById(R.id.tvWordsToSearch);
+		TVWordsToFind.setTextSize(12);
+		TVWordsToFind.setText("");
+		String editWords = LoadPuzzle.puzzlesWordsToFind.toString().substring(3);
+		TVWordsToFind.setText(editWords);
+		
+		
+		
+		
 		pointAArray[0] = 0;
 		pointAArray[1] = 0;
 		pointBArray[0] = 0;
@@ -131,7 +145,7 @@ public class PuzzleActivity extends ActionBarActivity {
 
 								jsonFoundWordsObject = JSONFoundWords.toString(); 
 								Log.i("jObject", JSONFoundWords.toString());
-								
+			
 							}
 							else{
 
@@ -165,6 +179,7 @@ public class PuzzleActivity extends ActionBarActivity {
 								else{
 									Log.i("jObject exists", jsonMainObject.toString());
 								}
+
 								
 							}
 							
@@ -189,9 +204,9 @@ public class PuzzleActivity extends ActionBarActivity {
 						int row2=0;
 						
 						//Saving the progress
-						if(SaveAndRestoreJSONPuzzle.SaveWordsFound(PuzzleActivity.this, StartActivity.puzzleName, jsonFoundWordsObject)){
+						SaveAndRestoreJSONPuzzle.SaveWordsFound(PuzzleActivity.this, StartActivity.puzzleName, jsonFoundWordsObject);
 							
-						}
+						
 						puzzleGridView.invalidate();
 					}
 				}
@@ -266,9 +281,17 @@ public class PuzzleActivity extends ActionBarActivity {
 						int tempColumOneD1 = Column;
 						int tempRowOneD1 =Row;
 						//Coords of second letter
-						int tempColumTwoD1 = Column - wordLength;
-						int tempRowTwoD1 = Row;
+						int tempColumTwoD1 = Column;
+						int tempRowTwoD1 = Row - (wordLength -1);
+						Log.i("Direction 0", wordSolution.getString("Word").toString() +" : "+tempColumOneD1 + ", " + tempRowOneD1 + ", " + tempColumTwoD1 + ", " + tempRowTwoD1);
+						
 						if(tempColumOneD1 == columnOne && tempRowOneD1 == rowOne && tempColumTwoD1 == columnTwo && tempRowTwoD1 == rowTwo){
+							Log.i("Puzzle found!", "Puzzle found");
+							tempWordFound = wordSolution.getString("Word").toString();
+							result = true; 
+						}
+						//Checking diffrent direction
+						else if(tempColumOneD1 == columnTwo && tempRowOneD1 == rowTwo && tempColumTwoD1 == columnOne && tempRowTwoD1 == rowOne){
 							Log.i("Puzzle found!", "Puzzle found");
 							tempWordFound = wordSolution.getString("Word").toString();
 							result = true; 

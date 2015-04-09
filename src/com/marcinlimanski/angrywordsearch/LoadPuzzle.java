@@ -13,6 +13,8 @@ public class LoadPuzzle {
 	public static ArrayList<String> wordsToFindArray = new ArrayList<String>();
 	public static int gridNumberOfColumns;
 	public static String playingPuzzleSolution;
+	
+	public static String puzzlesWordsToFind = "";
 	//Constructor
 	public LoadPuzzle() {
 		
@@ -47,15 +49,18 @@ public class LoadPuzzle {
 				//Checking if the object puzzle has been accessed correctly 
 				//Log.i("Object id", playingPuzzleId.toString());
 				
+				wordsToFindArray.clear();
 				//Extracting the words to find
 				JSONArray wordsArray = targetPuzzleObject.getJSONArray("Words");
 				for(int i=0; i<wordsArray.length(); i++){
 					wordsToFindArray.add(wordsArray.getString(i).toString());
 				}
 				
+				puzzlesWordsToFind = "";
 				//Checkingif the words are parsed correctly 
 				for (String temp : wordsToFindArray){
 					Log.i("Word: ", temp);
+					puzzlesWordsToFind = puzzlesWordsToFind + ",  " +temp.toString();
 				}
 				
 				//Extracting the gridwords and column number
@@ -91,14 +96,17 @@ public class LoadPuzzle {
 				//Checking if the object puzzle has been accessed correctly 
 				//Log.i("Object id", playingPuzzleId.toString());
 				
+				wordsToFindArray.clear();
 				//Extracting the words to find
 				JSONArray wordsArray = targetPuzzleObject.getJSONArray("Words");
 				for(int i=0; i<wordsArray.length(); i++){
 					wordsToFindArray.add(wordsArray.getString(i).toString());
 				}
 				
+				puzzlesWordsToFind = "";
 				//Checkingif the words are parsed correctly 
 				for (String temp : wordsToFindArray){
+					puzzlesWordsToFind = puzzlesWordsToFind + ",  " +temp.toString();
 					Log.i("Word: ", temp);
 				}
 				
