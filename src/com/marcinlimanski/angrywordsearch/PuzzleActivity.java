@@ -50,6 +50,10 @@ public class PuzzleActivity extends ActionBarActivity {
 	int numRows2;
 	int row2;
 	
+	//Handeling found words 
+	String tempWordFound = "";
+	public static String jsonFoundWordsObject = "";
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -107,6 +111,81 @@ public class PuzzleActivity extends ActionBarActivity {
 					//Preform the check
 					if(CheckWord(column, row, column2, row2)){
 						Log.i("WOWOWOWOW", "Puzzle found");
+						
+						//Creating a json object to save the found words 
+						try {
+							if(jsonFoundWordsObject.equals("")){
+								Log.i("Word array", tempWordFound + ", " + pointAArray[0] + ", " + pointAArray[1] + ", " +pointBArray[0] + ", " +pointBArray[1]);
+								JSONObject jsonObject = new JSONObject();
+								jsonObject.put("Word", tempWordFound);
+								jsonObject.put("sX", pointAArray[0]);
+								jsonObject.put("sY", pointAArray[1]);
+								jsonObject.put("eX", pointBArray[0] );
+								jsonObject.put("eY", pointBArray[1]);
+								
+								JSONArray jsonArray = new JSONArray();
+								jsonArray.put(jsonObject);
+								
+								JSONObject JSONFoundWords = new JSONObject();
+								JSONFoundWords.put("FoundWords", jsonArray);
+
+								jsonFoundWordsObject = JSONFoundWords.toString(); 
+								Log.i("jObject", JSONFoundWords.toString());
+								
+							}
+							else{
+
+								JSONObject jsonObject = new JSONObject();
+								jsonObject.put("Word", tempWordFound);
+								jsonObject.put("sX", pointAArray[0]);
+								jsonObject.put("sY", pointAArray[1]);
+								jsonObject.put("eX", pointBArray[0] );
+								jsonObject.put("eY", pointBArray[1]);
+								
+								String checkWord="";
+								JSONObject jsonMainObject = new JSONObject(jsonFoundWordsObject);
+								JSONArray jsonArray = jsonMainObject.getJSONArray("FoundWords");
+								//Checking if the array has this word already
+								for (int i=0; i<jsonArray.length(); i++){
+									JSONObject wordObject = jsonArray.getJSONObject(i);
+									 checkWord = checkWord + wordObject.getString("Word").toString();
+									
+									
+								}
+								
+								//if the constructed string does not contain temp word then add
+								if(!checkWord.contains(tempWordFound)){
+									jsonArray.put(jsonObject);
+									
+									jsonFoundWordsObject = jsonMainObject.toString();
+
+									Log.i("jObject exists", jsonMainObject.toString());
+			
+								}
+								
+								
+								
+							}
+							
+							
+						} catch (JSONException e) {
+							
+							e.printStackTrace();
+						}
+						
+						//Getting the column and row of given cell
+						int x =0;
+						int y =0;
+						int column=0;
+						int numRows=0;
+						int row=0;
+						
+						//Getting the column and row of given cell
+						int x2=0;
+						int y2=0;
+						int column2=0;
+						int numRows2=0;
+						int row2=0;
 					}
 				}
 
@@ -129,7 +208,7 @@ public class PuzzleActivity extends ActionBarActivity {
 	
 	public boolean CheckWord(int columnOne, int rowOne, int columnTwo, int rowTwo){
 		boolean result = false;
-		
+		tempWordFound = "";
 		try {
 			//Constructing the Json Solution object
 			JSONObject jsonObject = new JSONObject(LoadPuzzle.playingPuzzleSolution);
@@ -141,11 +220,15 @@ public class PuzzleActivity extends ActionBarActivity {
 			//Looping through the solutionWord array
 			for (int i =0; i<solutionWordsArray.length(); i++){
 				JSONObject wordSolution = solutionWordsArray.getJSONObject(i);
+				int direction = 0;
+				int Column = 0;
+				int Row = 0;
+				int wordLength = 0;
 				
-				int direction = wordSolution.getInt("Direction");
-				int Column = wordSolution.getInt("Column");
-				int Row = wordSolution.getInt("Row");
-				int wordLength = wordSolution.getString("Word").length();
+				direction = wordSolution.getInt("Direction");
+				Column = wordSolution.getInt("Column");
+				Row = wordSolution.getInt("Row");
+				wordLength = wordSolution.getString("Word").length();
 				
 				//Switch for diffrent directions, will return the Column and Row of given letter
 				switch(direction){
@@ -160,11 +243,13 @@ public class PuzzleActivity extends ActionBarActivity {
 						
 						if(tempColumOneD0 == columnOne && tempRowOneD0 == rowOne && tempColumTwoD0 == columnTwo && tempRowTwoD0 == rowTwo){
 							Log.i("Puzzle found!", "Puzzle found");
+							tempWordFound = wordSolution.getString("Word").toString();
 							result = true; 
 						}
 						//Checking diffrent direction
 						else if(tempColumOneD0 == columnTwo && tempRowOneD0 == rowTwo && tempColumTwoD0 == columnOne && tempRowTwoD0 == rowOne){
 							Log.i("Puzzle found!", "Puzzle found");
+							tempWordFound = wordSolution.getString("Word").toString();
 							result = true; 
 						}
 						break;
@@ -178,6 +263,7 @@ public class PuzzleActivity extends ActionBarActivity {
 						int tempRowTwoD1 = Row;
 						if(tempColumOneD1 == columnOne && tempRowOneD1 == rowOne && tempColumTwoD1 == columnTwo && tempRowTwoD1 == rowTwo){
 							Log.i("Puzzle found!", "Puzzle found");
+							tempWordFound = wordSolution.getString("Word").toString();
 							result = true; 
 						}
 						break;
@@ -193,11 +279,13 @@ public class PuzzleActivity extends ActionBarActivity {
 						
 						if(tempColumOneD2 == columnOne && tempRowOneD2 == rowOne && tempColumTwoD2 == columnTwo && tempRowTwoD2 == rowTwo){
 							Log.i("Puzzle found!", "Puzzle found");
+							tempWordFound = wordSolution.getString("Word").toString();
 							result = true; 
 						}
 						//Checking diffrent direction
 						else if(tempColumOneD2 == columnTwo && tempRowOneD2 == rowTwo && tempColumTwoD2 == columnOne && tempRowTwoD2 == rowOne){
 							Log.i("Puzzle found!", "Puzzle found");
+							tempWordFound = wordSolution.getString("Word").toString();
 							result = true; 
 						}
 						break;
@@ -212,11 +300,13 @@ public class PuzzleActivity extends ActionBarActivity {
 						
 						if(tempColumOneD3 == columnOne && tempRowOneD3 == rowOne && tempColumTwoD3 == columnTwo && tempRowTwoD3 == rowTwo){
 							Log.i("Puzzle found!", "Puzzle found");
+							tempWordFound = wordSolution.getString("Word").toString();
 							result = true; 
 						}
 						//Checking diffrent direction
 						else if(tempColumOneD3 == columnTwo && tempRowOneD3 == rowTwo && tempColumTwoD3 == columnOne && tempRowTwoD3 == rowOne){
 							Log.i("Puzzle found!", "Puzzle found");
+							tempWordFound = wordSolution.getString("Word").toString();
 							result = true; 
 						}
 						break;
@@ -231,11 +321,13 @@ public class PuzzleActivity extends ActionBarActivity {
 						
 						if(tempColumOneD4 == columnOne && tempRowOneD4 == rowOne && tempColumTwoD4 == columnTwo && tempRowTwoD4 == rowTwo){
 							Log.i("Puzzle found!", "Puzzle found");
+							tempWordFound = wordSolution.getString("Word").toString();
 							result = true; 
 						}
 						//Checking diffrent direction
 						else if(tempColumOneD4 == columnTwo && tempRowOneD4 == rowTwo && tempColumTwoD4 == columnOne && tempRowTwoD4 == rowOne){
 							Log.i("Puzzle found!", "Puzzle found");
+							tempWordFound = wordSolution.getString("Word").toString();
 							result = true; 
 						}
 						break;
@@ -251,11 +343,13 @@ public class PuzzleActivity extends ActionBarActivity {
 						
 						if(tempColumOneD5 == columnOne && tempRowOneD5 == rowOne && tempColumTwoD5 == columnTwo && tempRowTwoD5 == rowTwo){
 							Log.i("Puzzle found!", "Puzzle found");
+							tempWordFound = wordSolution.getString("Word").toString();
 							result = true; 
 						}
 						//Checking diffrent direction
 						else if(tempColumOneD5 == columnTwo && tempRowOneD5 == rowTwo && tempColumTwoD5 == columnOne && tempRowTwoD5 == rowOne){
 							Log.i("Puzzle found!", "Puzzle found");
+							tempWordFound = wordSolution.getString("Word").toString();
 							result = true; 
 						}
 						break;
@@ -266,16 +360,18 @@ public class PuzzleActivity extends ActionBarActivity {
 						int tempRowOneD6 =Row;
 						//Coords of second letter
 						int tempColumTwoD6 = Column;
-						int tempRowTwoD6 = Row + (wordLength -1);
+						int tempRowTwoD6 = Row + wordLength -1;
 						Log.i("Direction 6", wordSolution.getString("Word").toString() +" : "+tempColumOneD6 + ", " + tempRowOneD6 + ", " + tempColumTwoD6 + ", " + tempRowTwoD6);
 						
 						if(tempColumOneD6 == columnOne && tempRowOneD6 == rowOne && tempColumTwoD6 == columnTwo && tempRowTwoD6 == rowTwo){
 							Log.i("Puzzle found!", "Puzzle found");
+							tempWordFound = wordSolution.getString("Word").toString();
 							result = true; 
 						}
 						//Checking diffrent direction
 						else if(tempColumOneD6 == columnTwo && tempRowOneD6 == rowTwo && tempColumTwoD6 == columnOne && tempRowTwoD6 == rowOne){
 							Log.i("Puzzle found!", "Puzzle found");
+							tempWordFound = wordSolution.getString("Word").toString();
 							result = true; 
 						}
 						break;
@@ -290,11 +386,13 @@ public class PuzzleActivity extends ActionBarActivity {
 						
 						if(tempColumOneD7 == columnOne && tempRowOneD7 == rowOne && tempColumTwoD7 == columnTwo && tempRowTwoD7 == rowTwo){
 							Log.i("Puzzle found!", "Puzzle found");
+							tempWordFound = wordSolution.getString("Word").toString();
 							result = true; 
 						}
 						//Checking diffrent direction
 						else if(tempColumOneD7 == columnTwo && tempRowOneD7 == rowTwo && tempColumTwoD7 == columnOne && tempRowTwoD7 == rowOne){
 							Log.i("Puzzle found!", "Puzzle found");
+							tempWordFound = wordSolution.getString("Word").toString();
 							result = true; 
 						}
 						break;
