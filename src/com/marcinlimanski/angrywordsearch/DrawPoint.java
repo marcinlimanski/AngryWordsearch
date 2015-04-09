@@ -20,8 +20,17 @@ public class DrawPoint {
 		
 	}
 	
+	public static void ClearPoint(Canvas canvas, float startX, float startY){
+		Paint paint = new Paint();
+		paint.setColor(Color.TRANSPARENT);;
+
+		canvas.drawCircle(startX + 23, startY + 40, 35, paint);
+		
+	}
+	
+	
 	//Drawing the whole word 
-	public void DrawWord(Canvas canvas, float startX, float startY, float endX, float endY){
+	public static void DrawWord(Canvas canvas, float startX, float startY, float endX, float endY){
 		Paint paint = new Paint();
 		
 		paint.setColor(Color.CYAN);

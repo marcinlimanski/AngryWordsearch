@@ -1,5 +1,9 @@
 package com.marcinlimanski.angrywordsearch;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -40,14 +44,37 @@ public class PuzzleGridView extends GridView {
 		
 		if(PuzzleActivity.startDrawFirstPoint){
 			DrawPoint.SinglePoint(canvas, PuzzleActivity.pointAArray[0], PuzzleActivity.pointAArray[1]);
-			
 		}
-		if(PuzzleActivity.startDrawSecondPoint){
-			DrawPoint.SinglePoint(canvas, PuzzleActivity.pointBArray[0], PuzzleActivity.pointBArray[1]);
+		else{
+			DrawPoint.ClearPoint(canvas, PuzzleActivity.pointAArray[0], PuzzleActivity.pointAArray[1]);
 		}
-		if(PuzzleActivity.clearPoints){
-			 //canvas.drawRect(0, 0, 0, 0, clearPaint); 
+
+		
+		try{
+			JSONObject jsonMainObject = new JSONObject(PuzzleActivity.jsonFoundWordsObject);
+			JSONArray jsonArray = jsonMainObject.getJSONArray("FoundWords");
+			//Checking if the array has this word already
+			for (int i=0; i<jsonArray.length(); i++){
+				JSONObject wordObject = jsonArray.getJSONObject(i);
+
+				int startX = (Integer) wordObject.get("sX");
+				int startY =  (Integer) wordObject.get("sY");
+				int endX = (Integer) wordObject.get("eX");
+				int endY = (Integer) wordObject.get("eY");
+				
+				float testX = startX;
+				float testY = startY;
+				float test1X = endX;
+				float test1Y = endY;
+				
+				DrawPoint.DrawWord(canvas, testX, testY, test1X, test1Y);
+				
+			}
 		}
+		catch(JSONException e){
+			e.printStackTrace();
+		}
+		
 		
 
 		

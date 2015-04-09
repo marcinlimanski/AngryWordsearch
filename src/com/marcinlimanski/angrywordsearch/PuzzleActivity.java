@@ -62,12 +62,13 @@ public class PuzzleActivity extends ActionBarActivity {
 		pointAArray[1] = 0;
 		pointBArray[0] = 0;
 		pointBArray[1] = 0;
+		jsonFoundWordsObject = SaveAndRestoreJSONPuzzle.RestoreFoundWords(PuzzleActivity.this, StartActivity.puzzleName);
+		Log.i("FoundPuzzles for this:", jsonFoundWordsObject);
 		puzzleGridView = (com.marcinlimanski.angrywordsearch.PuzzleGridView) findViewById(R.id.gvPuzzle);
 		puzzleGridView.setAdapter(new PuzzleGridAdapter(PuzzleActivity.this));
 		puzzleGridView.setNumColumns(columns);
 		puzzleGridView.invalidate();
 		puzzleGridView.setOnItemClickListener(new OnItemClickListener() {
-
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				
@@ -75,8 +76,6 @@ public class PuzzleActivity extends ActionBarActivity {
 				//Toast.makeText(PuzzleActivity.this, "Column: "+column + ", Row:" + row, Toast.LENGTH_SHORT).show();
 				
 				if(letterSwitch){
-					puzzleGridView.invalidate();
-					clearPoints = false;
 					startDrawFirstPoint = true;
 					pointAArray[0] = view.getLeft();
 					pointAArray[1] = view.getTop();
@@ -89,14 +88,15 @@ public class PuzzleActivity extends ActionBarActivity {
 					column = x;
 					numRows = (int) Math.ceil(puzzleGridView.getCount()/columns) -1;
 					row = (y - numRows) * -1;
+					puzzleGridView.invalidate();
 				}
 				else{
-					startDrawSecondPoint = true;
+					startDrawFirstPoint = false;
+					puzzleGridView.invalidate();
 					pointBArray[0] = view.getLeft();
 					pointBArray[1] = view.getTop();
 					letterSwitch = true;
-					puzzleGridView.invalidate();
-					clearPoints= true;
+
 
 					//Getting the column and row of given cell
 					x2 = position % columns;
@@ -162,8 +162,9 @@ public class PuzzleActivity extends ActionBarActivity {
 									Log.i("jObject exists", jsonMainObject.toString());
 			
 								}
-								
-								
+								else{
+									Log.i("jObject exists", jsonMainObject.toString());
+								}
 								
 							}
 							
@@ -186,6 +187,12 @@ public class PuzzleActivity extends ActionBarActivity {
 						int column2=0;
 						int numRows2=0;
 						int row2=0;
+						
+						//Saving the progress
+						if(SaveAndRestoreJSONPuzzle.SaveWordsFound(PuzzleActivity.this, StartActivity.puzzleName, jsonFoundWordsObject)){
+							
+						}
+						puzzleGridView.invalidate();
 					}
 				}
 
@@ -435,10 +442,12 @@ public class PuzzleActivity extends ActionBarActivity {
 		return super.onOptionsItemSelected(item);
 	}
 	
+	
 	@Override
 	public void onBackPressed() {
 		startDrawFirstPoint = false;
 		startDrawSecondPoint = false;
 		finish();
+		
 	}
 }

@@ -42,6 +42,8 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 	private String password = "";
 	public static String globalDates = "";
 	
+	public static String puzzleName = "";
+	
 	public static String selectedPuzzleDate = ""; 
 	
 	//For datepicker
@@ -234,7 +236,7 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 				TextView textView = (TextView) viewClicked;
 				
 				//Building a string 
-				String puzzleName = textView.getText().toString();
+				puzzleName = textView.getText().toString();
 				String jsonPuzzleAndSolution = SaveAndRestoreJSONPuzzle.RestoreJSONPuzzleandSolution(StartActivity.this, puzzleName);
 				
 				//Check if the puzzle loaded correctly 
@@ -263,7 +265,6 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 			
 			//String test1 = SaveAndRestoreJSONPuzzle.RestoreJSONSates(StartActivity.this);
 			//Log.i("New dates object: ", test1);
-			
 			String url = "http://08309.net.dcs.hull.ac.uk/api/wordsearch/solution?id="+choosenPuzzleID;
 			RegHTTPAsync getTodaysPuzzleSolution =  new RegHTTPAsync(StartActivity.this);
 			getTodaysPuzzleSolution.execute(url);
@@ -383,7 +384,8 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 					int day = calendar.get(Calendar.DAY_OF_MONTH);
 					
 					String todaysPuzzleDate = String.valueOf(year) + "-" + String.valueOf(month) + "-"+ String.valueOf(day);
-					
+					//setting name for the found words file
+					puzzleName = todaysPuzzleDate;
 					//Saving the puzzleAndSolution
 					try {
 						if(SaveAndRestoreJSONPuzzle.SaveJSONTodaysPuzzleAndSolution(StartActivity.this, tempPuzzle, httpData, todaysPuzzleDate)){
