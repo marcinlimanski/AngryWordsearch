@@ -103,7 +103,13 @@ public class PuzzleActivity extends ActionBarActivity {
 		}
 		
 		if(editWords.equals("")){
+			//Getting user pass to use with bellow code
+			String username = SharedPreferencesWrapper.getFromPrefs(PuzzleActivity.this, "username", "");
+			String password = SharedPreferencesWrapper.getFromPrefs(PuzzleActivity.this, "password", "");
+			
 			TVWordsToFind.setText("You have completed this puzzle!!");
+			String test= FormingSolutionSubmission.SubmitPuzzleSolution(LoadPuzzle.chosenPuzzleSolutionForSumbision, username, password);
+			Log.i("submision object", test);
 		}
 		else{
 			TVWordsToFind.setText(editWords.toString().substring(1));
@@ -258,7 +264,7 @@ public class PuzzleActivity extends ActionBarActivity {
 							editWords = editWords + ", " + tempWord;
 						}
 						
-						
+						//This is where you do the score send!!
 						if(editWords.equals("")){
 							TVWordsToFind.setText("You have completed this puzzle!!");
 						}

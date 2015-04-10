@@ -14,7 +14,7 @@ public class DrawPoint {
 	//Drawing just one point on the grid
 	public static void SinglePoint(Canvas canvas, float startX, float startY){
 		Paint paint = new Paint();
-		paint.setColor(Color.CYAN);;
+		paint.setColor(Color.MAGENTA);;
 
 		canvas.drawCircle(startX + 23, startY + 40, 35, paint);
 		

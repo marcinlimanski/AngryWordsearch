@@ -13,6 +13,7 @@ public class LoadPuzzle {
 	public static ArrayList<String> wordsToFindArray = new ArrayList<String>();
 	public static int gridNumberOfColumns;
 	public static String playingPuzzleSolution;
+	public static String chosenPuzzleSolutionForSumbision;
 	
 	public static String puzzlesWordsToFind = "";
 	//Constructor
@@ -22,6 +23,7 @@ public class LoadPuzzle {
 	
 	public static boolean InitPuzzle(String puzzle){
 		boolean result = false;
+		chosenPuzzleSolutionForSumbision = "";
 		try{
 			playingPuzzleId = "";
 			gridWords = "";
@@ -43,6 +45,9 @@ public class LoadPuzzle {
 				playingPuzzleSolution = playingPuzzleSolutionObject.toString();
 				//Checking if the object puzzle has been accessed correctly 
 				Log.i("Playing Puzzle Solution", playingPuzzleSolutionObject.toString());
+				
+				//Setting a global var for later puzzle submission
+				chosenPuzzleSolutionForSumbision = playingPuzzleSolutionObject.toString();
 				
 				//Extracting the Id of the puzzle 
 				playingPuzzleId = targetPuzzleObject.getString("Id");
@@ -88,8 +93,10 @@ public class LoadPuzzle {
 				JSONObject playingPuzzleSolutionObject = puzzleAndSolutionPuzzle.getJSONObject("Solution");
 				playingPuzzleSolution = playingPuzzleSolutionObject.toString();
 				//Checking if the object puzzle has been accessed correctly 
-				Log.i("Playing Puzzle Solution", playingPuzzleSolutionObject.toString());
+				Log.i("Playing Puzzle Solution", targetPuzzleObject.toString());
 				
+				//Setting a global var for later puzzle submission
+				chosenPuzzleSolutionForSumbision = playingPuzzleSolutionObject.toString();
 				
 				//Extracting the Id of the puzzle 
 				playingPuzzleId = targetPuzzleObject.getString("Id");

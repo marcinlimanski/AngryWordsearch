@@ -41,15 +41,7 @@ public class PuzzleGridView extends GridView {
 		
 		// invalidate(); // Redraws.
 		super.onDraw(canvas);
-		
-		if(PuzzleActivity.startDrawFirstPoint){
-			DrawPoint.SinglePoint(canvas, PuzzleActivity.pointAArray[0], PuzzleActivity.pointAArray[1]);
-		}
-		else{
-			DrawPoint.ClearPoint(canvas, PuzzleActivity.pointAArray[0], PuzzleActivity.pointAArray[1]);
-		}
 
-		
 		try{
 			JSONObject jsonMainObject = new JSONObject(PuzzleActivity.jsonFoundWordsObject);
 			JSONArray jsonArray = jsonMainObject.getJSONArray("FoundWords");
@@ -75,6 +67,12 @@ public class PuzzleGridView extends GridView {
 			e.printStackTrace();
 		}
 		
+		if(PuzzleActivity.startDrawFirstPoint){
+			DrawPoint.SinglePoint(canvas, PuzzleActivity.pointAArray[0], PuzzleActivity.pointAArray[1]);
+		}
+		else{
+			DrawPoint.ClearPoint(canvas, PuzzleActivity.pointAArray[0], PuzzleActivity.pointAArray[1]);
+		}
 		
 
 		
