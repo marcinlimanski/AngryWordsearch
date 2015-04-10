@@ -4,10 +4,12 @@
     tools:context="com.marcinlimanski.angrywordsearch.PuzzleActivity" >
 
     <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never"/>
+        android:id="@+id/option_getsolution"
+        android:title="@string/option_getsolution"/>
+    
+    <item
+        android:id="@+id/option_delete"
+        android:title="@string/option_delete"/>
     
     
 

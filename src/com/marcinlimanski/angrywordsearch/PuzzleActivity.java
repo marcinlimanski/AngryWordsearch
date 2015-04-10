@@ -1,5 +1,7 @@
 package com.marcinlimanski.angrywordsearch;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import org.json.JSONArray;
@@ -38,6 +40,9 @@ public class PuzzleActivity extends ActionBarActivity {
 	int posA = 0;
 	int posB = 0;
 	
+	//StringLits for updated  words to find
+	private ArrayList<String> updatedWordsToFindArray = new ArrayList<String>();
+	
 	//Getting the column and row of given cell
 	int x ;
 	int y;
@@ -58,26 +63,62 @@ public class PuzzleActivity extends ActionBarActivity {
 	String tempWordFound = "";
 	public static String jsonFoundWordsObject = "";
 
+	public void UpdateTVWordsToFind(){
+		String FoundWordsObjectString = SaveAndRestoreJSONPuzzle.RestoreFoundWords(PuzzleActivity.this, StartActivity.puzzleName);
+		updatedWordsToFindArray.clear();
+		
+		//StringList array of all words to find 
+		for (String temp : LoadPuzzle.wordsToFindArray){
+			//Log.i("Word to find: ", temp);
+			if(!FoundWordsObjectString.contains(temp)){
+				updatedWordsToFindArray.add(temp);
+			}
+		}
+		
+	
+		for (String temp : updatedWordsToFindArray){
+			Log.i("Update words to find:", temp);
+		}
+		
+	}
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		//Updating the view by seeing what puzzles have been discovered
+		UpdateTVWordsToFind();
+		
 		setContentView(R.layout.activity_puzzle);
 		TVWordsToFind = (TextView)findViewById(R.id.tvWordsToSearch);
 		TVWordsToFind.setTextSize(12);
 		TVWordsToFind.setText("");
-		String editWords = LoadPuzzle.puzzlesWordsToFind.toString().substring(3);
-		TVWordsToFind.setText(editWords);
 		
+		//Updating the view by seeing what puzzles have been discovered
+		UpdateTVWordsToFind();
 		
+		String editWords ="";
+		for (String tempWord : updatedWordsToFindArray){
+			editWords = editWords + ", " + tempWord;
+		}
 		
+		if(editWords.equals("")){
+			TVWordsToFind.setText("You have completed this puzzle!!");
+		}
+		else{
+			TVWordsToFind.setText(editWords.toString().substring(1));
+		}
 		
+
 		pointAArray[0] = 0;
 		pointAArray[1] = 0;
 		pointBArray[0] = 0;
 		pointBArray[1] = 0;
+		
+		//JSONObject of all found words
 		jsonFoundWordsObject = SaveAndRestoreJSONPuzzle.RestoreFoundWords(PuzzleActivity.this, StartActivity.puzzleName);
 		Log.i("FoundPuzzles for this:", jsonFoundWordsObject);
+		
 		puzzleGridView = (com.marcinlimanski.angrywordsearch.PuzzleGridView) findViewById(R.id.gvPuzzle);
 		puzzleGridView.setAdapter(new PuzzleGridAdapter(PuzzleActivity.this));
 		puzzleGridView.setNumColumns(columns);
@@ -205,9 +246,26 @@ public class PuzzleActivity extends ActionBarActivity {
 						
 						//Saving the progress
 						SaveAndRestoreJSONPuzzle.SaveWordsFound(PuzzleActivity.this, StartActivity.puzzleName, jsonFoundWordsObject);
-							
-						
+
 						puzzleGridView.invalidate();
+						
+						String editWords ="";
+						//Updating the view by seeing what puzzles have been discovered
+						UpdateTVWordsToFind();
+						
+						
+						for (String tempWord : updatedWordsToFindArray){
+							editWords = editWords + ", " + tempWord;
+						}
+						
+						
+						if(editWords.equals("")){
+							TVWordsToFind.setText("You have completed this puzzle!!");
+						}
+						else{
+							TVWordsToFind.setText(editWords.toString().substring(1));
+						}
+						
 					}
 				}
 
@@ -459,10 +517,77 @@ public class PuzzleActivity extends ActionBarActivity {
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
+		boolean handle = false;
+		
+		//using switch statment to catch the diffrent id
+		switch(id){
+			case R.id.option_getsolution:
+				handle = true;
+				break;
+				
+			case R.id.option_delete:
+				Log.i("Delete option", "active");
+				/*
+				try{
+					//Deleting the date from the dateObject 
+					String DatesObject = SaveAndRestoreJSONPuzzle.RestoreJSONSates(PuzzleActivity.this);
+					JSONObject jasonObject = new JSONObject(DatesObject); 
+					JSONArray DatesArray = jasonObject.getJSONArray("PuzzleDates");
+					int pos =0;
+					for(int i =0; i<DatesArray.length(); i++){
+						JSONObject entryArray = DatesArray.getJSONObject(i);
+						if(entryArray.getString("date").toString().equals(StartActivity.puzzleName)){
+							pos = i;
+						}
+						
+					}
+					DatesArray.remove(pos);
+					
+					String newDateObject = jasonObject.toString();
+					//Overriding the dates object wiht new file 
+					SaveAndRestoreJSONPuzzle.SaveJSONObjectDates(PuzzleActivity.this, newDateObject);
+					
+					//Deleting the Puzzle and solution
+					File file = new File("/data/data/com.marcinlimanski.angrywordsearch/files/"+StartActivity.puzzleName+ "ArrayFormat"+".json");
+					File file2 = new File("/data/data/com.marcinlimanski.angrywordsearch/files/"+StartActivity.puzzleName+ ".json");
+					boolean deleted = file.delete();
+					boolean deleted2 = file2.delete();
+					if(deleted == false){
+						if(deleted2 == false){
+							
+						}
+						Log.i("Puzzle deleted", "Puzzle deleted");
+					}
+					else{
+						Log.i("Puzzle deleted", "Puzzle deleted");
+					}
+					
+					//Deleting the foundWords file
+					File file3 = new File("/data/data/com.marcinlimanski.angrywordsearch/files/"+StartActivity.puzzleName+"WordsFound.json");
+					boolean deleted3 = file.delete();
+					if(deleted3== false){
+						Log.i("FoundWords NOT deleted", "FoundWords NOT deleted");
+					}
+					else{
+						Log.i("FoundWords deleted", "FoundWords deleted");
+					}
+					finish();
+				}
+				catch(JSONException e){
+					e.printStackTrace();
+				}
+				catch(IOException e){
+					e.printStackTrace();
+				}
+				*/
+				handle = true;
+				break;
+			
+			default:
+				handle = super.onOptionsItemSelected(item);
+				
 		}
-		return super.onOptionsItemSelected(item);
+		return handle;
 	}
 	
 	

@@ -59,7 +59,7 @@ public class LoadPuzzle {
 				puzzlesWordsToFind = "";
 				//Checkingif the words are parsed correctly 
 				for (String temp : wordsToFindArray){
-					Log.i("Word: ", temp);
+					//Log.i("Word: ", temp);
 					puzzlesWordsToFind = puzzlesWordsToFind + ",  " +temp.toString();
 				}
 				
@@ -107,7 +107,7 @@ public class LoadPuzzle {
 				//Checkingif the words are parsed correctly 
 				for (String temp : wordsToFindArray){
 					puzzlesWordsToFind = puzzlesWordsToFind + ",  " +temp.toString();
-					Log.i("Word: ", temp);
+					//Log.i("Word: ", temp);
 				}
 				
 				//Extracting the gridwords and column number

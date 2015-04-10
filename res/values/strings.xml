@@ -13,5 +13,8 @@
     <string name="option_unregister">Unregister</string>
     <string name="title_activity_account_info">AccountInfoActivity</string>
     <string name="title_activity_puzzle">PuzzleActivity</string>
+    <string name="option_getsolution">Get Solution</string>
+    <string name="option_delete">Delete this Puzzle</string>
+    
 
 </resources>

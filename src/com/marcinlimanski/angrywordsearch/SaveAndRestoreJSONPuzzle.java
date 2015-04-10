@@ -235,6 +235,18 @@ public class SaveAndRestoreJSONPuzzle implements OnHTTPReg{
 		
 	}
 	
+	public static void SaveJSONObjectDates(Context context, String object){
+		try{
+			String newData =object;
+			FileOutputStream fos = context.openFileOutput("dates.json", context.MODE_PRIVATE);
+			fos.write(newData.getBytes());
+			fos.close();
+		}
+		catch(IOException e){
+			e.printStackTrace();
+		}
+	}
+	
 	public static String RestoreJSONSates(Context context) throws IOException, JSONException{
 		String data = "";
 		

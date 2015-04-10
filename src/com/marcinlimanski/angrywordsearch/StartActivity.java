@@ -38,6 +38,8 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 	public boolean getTodaysPuzzleflag=false;
 	public boolean assignTodaysPuzzle = false;
 	
+	
+	
 	private String username = "";
 	private String password = "";
 	public static String globalDates = "";
@@ -49,6 +51,11 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 	//For datepicker
 	DateFormat formate=DateFormat.getDateInstance();
 	Calendar calendar=Calendar.getInstance();
+	
+	int yearNow = calendar.get(Calendar.YEAR);
+	int mNow = calendar.get(Calendar.MONTH);
+	int monthNow = mNow +1;
+	int dayNow = calendar.get(Calendar.DAY_OF_MONTH);
 		
 	//For sending the oldpuzel meta data
 	private String choosenPuzzleDate = "";
@@ -82,6 +89,7 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 		Log.i("On create global date", globalDates);
 	}
 
+	
 	//Options menu event 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -219,7 +227,6 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 	//Callback method for ListView
 	private void registerClickCallback(){
 		ListView list = (ListView) findViewById(R.id.listView1);
-		list.setTextAlignment(TEXT_ALIGNMENT_CENTER );
 		list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
 			@Override
@@ -252,17 +259,17 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 	
 	//Clicked event for Today's puzzle
 	public void btnTodaysPuzzleClicked(View v) throws IOException, JSONException{
+		puzzleName = "";
 		if(v.getId() == R.id.btnTodaysPuzzle){
-			int year = calendar.get(Calendar.YEAR);
-			int m = calendar.get(Calendar.MONTH);
-			int month = m +1;
-			int day = calendar.get(Calendar.DAY_OF_MONTH);
 			
-			String todaysPuzzleDate = String.valueOf(year) + "-" + String.valueOf(month) + "-"+ String.valueOf(day);
-			//setting name for the found words file
-			puzzleName = todaysPuzzleDate;
 
-			if(!SaveAndRestoreJSONPuzzle.RestoreJSONPuzzleandSolution(StartActivity.this, todaysPuzzleDate).equals("")){
+			String todaysPuzzleDateNow = String.valueOf(yearNow) + "-" + String.valueOf(monthNow) + "-"+ String.valueOf(dayNow);
+			//setting name for the found words file
+			Log.i("Todas puzzle date: ", yearNow +" "+ monthNow + " " + dayNow);
+			puzzleName = todaysPuzzleDateNow;
+			if(!SaveAndRestoreJSONPuzzle.RestoreJSONPuzzleandSolution(StartActivity.this, todaysPuzzleDateNow).equals("")){
+
+				Log.i("Todas puzzle date: ", puzzleName);
 				//Loading the puzzle
 				String jsonPuzzleAndSolution = SaveAndRestoreJSONPuzzle.RestoreJSONPuzzleandSolution(StartActivity.this, puzzleName);
 				//Load choosen puzzle 
