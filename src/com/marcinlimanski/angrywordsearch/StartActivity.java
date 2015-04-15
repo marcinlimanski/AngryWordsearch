@@ -265,11 +265,12 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 
 			String todaysPuzzleDateNow = String.valueOf(yearNow) + "-" + String.valueOf(monthNow) + "-"+ String.valueOf(dayNow);
 			//setting name for the found words file
-			Log.i("Todas puzzle date: ", yearNow +" "+ monthNow + " " + dayNow);
+			Log.i("Todas puzzle date 1: ", yearNow +" "+ monthNow + " " + dayNow);
 			puzzleName = todaysPuzzleDateNow;
-			if(!SaveAndRestoreJSONPuzzle.RestoreJSONPuzzleandSolution(StartActivity.this, todaysPuzzleDateNow).equals("")){
+			if(!SaveAndRestoreJSONPuzzle.RestoreJSONPuzzleandSolution(StartActivity.this, puzzleName).equals("")){
 
-				Log.i("Todas puzzle date: ", puzzleName);
+
+				Log.i("Todas puzzle date: 2", puzzleName);
 				//Loading the puzzle
 				String jsonPuzzleAndSolution = SaveAndRestoreJSONPuzzle.RestoreJSONPuzzleandSolution(StartActivity.this, puzzleName);
 				//Load choosen puzzle 
@@ -315,9 +316,7 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 		
 		@Override
 		public void onDateSet(DatePicker view, int year, int monthOfYear,int dayOfMonth) {
-			calendar.set(Calendar.YEAR, year);
-			calendar.set(Calendar.MONTH, monthOfYear);
-			calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+			
 			int updatedMonth = monthOfYear + 1;
 			Log.i("Date: ",  year +"-"+updatedMonth+"-"+dayOfMonth);
 			

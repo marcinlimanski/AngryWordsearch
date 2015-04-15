@@ -21,7 +21,7 @@ import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class PuzzleActivity extends ActionBarActivity {
+public class PuzzleActivity extends ActionBarActivity implements OnPOST{
 	PuzzleGridView puzzleGridView;
 	int columns = LoadPuzzle.gridNumberOfColumns;
 	public static float startDrawX;
@@ -409,7 +409,7 @@ public class PuzzleActivity extends ActionBarActivity {
 						int tempColumOneD4 = Column;
 						int tempRowOneD4 =Row;
 						//Coords of second letter
-						int tempColumTwoD4 = Column + (wordLength);
+						int tempColumTwoD4 = Column + (wordLength - 1);
 						int tempRowTwoD4 = Row;
 						Log.i("Direction 4", wordSolution.getString("Word").toString() +" : "+tempColumOneD4+ ", " + tempRowOneD4 + ", " + tempColumTwoD4 + ", " + tempRowTwoD4);
 						
@@ -602,6 +602,12 @@ public class PuzzleActivity extends ActionBarActivity {
 		startDrawFirstPoint = false;
 		startDrawSecondPoint = false;
 		finish();
+		
+	}
+
+	@Override
+	public void onTaskPostCompleted(String httpData) throws JSONException {
+		// TODO Auto-generated method stub
 		
 	}
 }
