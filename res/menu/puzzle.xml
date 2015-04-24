@@ -8,8 +8,8 @@
         android:title="@string/option_getsolution"/>
     
     <item
-        android:id="@+id/option_delete"
-        android:title="@string/option_delete"/>
+        android:id="@+id/option_submitPuzzle"
+        android:title="@string/option_submitPuzzle"/>
     
     
 

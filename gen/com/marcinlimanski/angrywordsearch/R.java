@@ -1692,9 +1692,9 @@ containing a value of this type.
         public static final int none=0x7f09000f;
         public static final int normal=0x7f09000b;
         public static final int option_accinfo=0x7f09005c;
-        public static final int option_delete=0x7f09005a;
         public static final int option_getsolution=0x7f090059;
         public static final int option_logout=0x7f09005b;
+        public static final int option_submitPuzzle=0x7f09005a;
         public static final int option_unregister=0x7f09005d;
         public static final int progress_circular=0x7f090007;
         public static final int progress_horizontal=0x7f090008;
@@ -1863,9 +1863,9 @@ containing a value of this type.
         public static final int app_name=0x7f0a0010;
         public static final int hello_world=0x7f0a0011;
         public static final int option_accinfo=0x7f0a0018;
-        public static final int option_delete=0x7f0a001d;
         public static final int option_getsolution=0x7f0a001c;
         public static final int option_logout=0x7f0a0017;
+        public static final int option_submitPuzzle=0x7f0a001d;
         public static final int option_unregister=0x7f0a0019;
         public static final int title_activity_account_info=0x7f0a001a;
         public static final int title_activity_log=0x7f0a0016;

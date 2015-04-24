@@ -531,61 +531,8 @@ public class PuzzleActivity extends ActionBarActivity implements OnPOST{
 				handle = true;
 				break;
 				
-			case R.id.option_delete:
-				Log.i("Delete option", "active");
-				/*
-				try{
-					//Deleting the date from the dateObject 
-					String DatesObject = SaveAndRestoreJSONPuzzle.RestoreJSONSates(PuzzleActivity.this);
-					JSONObject jasonObject = new JSONObject(DatesObject); 
-					JSONArray DatesArray = jasonObject.getJSONArray("PuzzleDates");
-					int pos =0;
-					for(int i =0; i<DatesArray.length(); i++){
-						JSONObject entryArray = DatesArray.getJSONObject(i);
-						if(entryArray.getString("date").toString().equals(StartActivity.puzzleName)){
-							pos = i;
-						}
-						
-					}
-					DatesArray.remove(pos);
-					
-					String newDateObject = jasonObject.toString();
-					//Overriding the dates object wiht new file 
-					SaveAndRestoreJSONPuzzle.SaveJSONObjectDates(PuzzleActivity.this, newDateObject);
-					
-					//Deleting the Puzzle and solution
-					File file = new File("/data/data/com.marcinlimanski.angrywordsearch/files/"+StartActivity.puzzleName+ "ArrayFormat"+".json");
-					File file2 = new File("/data/data/com.marcinlimanski.angrywordsearch/files/"+StartActivity.puzzleName+ ".json");
-					boolean deleted = file.delete();
-					boolean deleted2 = file2.delete();
-					if(deleted == false){
-						if(deleted2 == false){
-							
-						}
-						Log.i("Puzzle deleted", "Puzzle deleted");
-					}
-					else{
-						Log.i("Puzzle deleted", "Puzzle deleted");
-					}
-					
-					//Deleting the foundWords file
-					File file3 = new File("/data/data/com.marcinlimanski.angrywordsearch/files/"+StartActivity.puzzleName+"WordsFound.json");
-					boolean deleted3 = file.delete();
-					if(deleted3== false){
-						Log.i("FoundWords NOT deleted", "FoundWords NOT deleted");
-					}
-					else{
-						Log.i("FoundWords deleted", "FoundWords deleted");
-					}
-					finish();
-				}
-				catch(JSONException e){
-					e.printStackTrace();
-				}
-				catch(IOException e){
-					e.printStackTrace();
-				}
-				*/
+			case R.id.option_submitPuzzle:
+				Log.i("Submit puzzle option", "active");
 				handle = true;
 				break;
 			

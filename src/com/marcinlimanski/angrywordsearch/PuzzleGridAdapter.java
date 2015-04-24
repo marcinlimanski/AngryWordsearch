@@ -38,7 +38,7 @@ public class PuzzleGridAdapter extends BaseAdapter{
 	public View getView(int position, View convertView, ViewGroup parent) {
 		// TODO Auto-generated method stub
 		TextView puzzleView = new TextView(context);
-		puzzleView.setTextSize(20);
+		puzzleView.setTextSize(15);
 		puzzleView.setText(String.valueOf(items.charAt(position)));
 		
 		
