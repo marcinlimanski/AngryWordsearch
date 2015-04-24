@@ -19,6 +19,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -222,6 +224,32 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 		//Configure list view
 		ListView list = (ListView) findViewById(R.id.listView1);
 		list.setAdapter(adapter);
+		registerForContextMenu(list);
+	}
+
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo){
+		if(v.getId() == R.id.listView1){
+			AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)menuInfo;
+			String[] menuItems = getResources().getStringArray(R.array.itemMenu);
+			for (int i = 0; i<menuItems.length; i++) {
+			      menu.add(Menu.NONE, i, i, menuItems[i]);
+			}
+		}
+	}
+	
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		
+		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
+		int menuItemIndex = item.getItemId();
+		String[] menuItems = getResources().getStringArray(R.array.itemMenu);
+		String menuItemName = menuItems[menuItemIndex];
+		
+		Toast.makeText(this, "selected index is: " + menuItemName, Toast.LENGTH_SHORT).show();
+		
+		return true;
+		
 	}
 	
 	//Callback method for ListView
