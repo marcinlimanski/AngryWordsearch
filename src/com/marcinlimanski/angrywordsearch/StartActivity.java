@@ -1,6 +1,7 @@
 package com.marcinlimanski.angrywordsearch;
 
 import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.text.DateFormat;
@@ -70,6 +71,8 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 	private String tempPuzzle = "";
 	private String tempSolution = "";
 	String[] listOfDates = {""};
+	
+	ArrayList<String> puzzleDatesArray;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -191,7 +194,7 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 	//ListView for all puzzles 
 	private void populateListView(){
 		//Create list of items
-		ArrayList<String> puzzleDatesArray = new ArrayList<String>();
+		puzzleDatesArray = new ArrayList<String>();
 		
 		//Accessing the list of dates
 		try {
@@ -213,7 +216,8 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 			
 			e.printStackTrace();
 		}
-
+		//Remove the test puzzle
+		puzzleDatesArray.remove(0);
 		//build adapter 
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(
 				this, //some context for activity 
@@ -245,8 +249,68 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 		int menuItemIndex = item.getItemId();
 		String[] menuItems = getResources().getStringArray(R.array.itemMenu);
 		String menuItemName = menuItems[menuItemIndex];
+		String puzzleItemName = puzzleDatesArray.get(info.position);
 		
-		Toast.makeText(this, "selected index is: " + menuItemName, Toast.LENGTH_SHORT).show();
+		if(menuItemName.equals("Delete puzzle")){
+			//Toast.makeText(this, "delete this puzzle: " + listItemName, Toast.LENGTH_SHORT).show();
+			
+			try{
+				//Deleting the date from the dateObject 
+				String DatesObject = SaveAndRestoreJSONPuzzle.RestoreJSONSates(StartActivity.this);
+				JSONObject jasonObject = new JSONObject(DatesObject); 
+				JSONArray DatesArray = jasonObject.getJSONArray("PuzzleDates");
+				int pos =0;
+				for(int i =0; i<DatesArray.length(); i++){
+					JSONObject entryArray = DatesArray.getJSONObject(i);
+					if(entryArray.getString("date").toString().equals(StartActivity.puzzleName)){
+						pos = i;
+					}
+					
+				}
+				DatesArray.remove(pos);
+				
+				String newDateObject = jasonObject.toString();
+				//Overriding the dates object wiht new file 
+				SaveAndRestoreJSONPuzzle.SaveJSONObjectDates(StartActivity.this, newDateObject);
+				
+				//Deleting the Puzzle and solution
+				File file = new File("/data/data/com.marcinlimanski.angrywordsearch/files/"+puzzleItemName+ "ArrayFormat"+".json");
+				File file2 = new File("/data/data/com.marcinlimanski.angrywordsearch/files/"+puzzleItemName+ ".json");
+				boolean deleted = file.delete();
+				boolean deleted2 = file2.delete();
+				if(deleted == false){
+					if(deleted2 == false){
+						
+					}
+					Log.i("Puzzle deleted", "Puzzle deleted");
+				}
+				else{
+					Log.i("Puzzle deleted", "Puzzle deleted");
+				}
+				
+				//Deleting the foundWords file
+				File file3 = new File("/data/data/com.marcinlimanski.angrywordsearch/files/"+puzzleItemName+"WordsFound.json");
+				boolean deleted3 = file.delete();
+				if(deleted3== false){
+					Log.i("FoundWords NOT deleted", "FoundWords NOT deleted");
+				}
+				else{
+					Log.i("FoundWords deleted", "FoundWords deleted");
+				}
+				populateListView();
+			}
+			catch(JSONException e){
+				e.printStackTrace();
+			}
+			catch(IOException e){
+				e.printStackTrace();
+			}
+			
+			
+		}
+		
+		
+		//Toast.makeText(this, "selected index is: " + listItemName, Toast.LENGTH_SHORT).show();
 		
 		return true;
 		
