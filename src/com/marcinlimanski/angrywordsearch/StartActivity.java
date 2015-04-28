@@ -40,6 +40,7 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 	public boolean getOldPuzzleflag = false;
 	public boolean getTodaysPuzzleflag=false;
 	public boolean assignTodaysPuzzle = false;
+	public boolean getPuzzleScoreflag = false;
 	
 	
 	
@@ -290,7 +291,7 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 				
 				//Deleting the foundWords file
 				File file3 = new File("/data/data/com.marcinlimanski.angrywordsearch/files/"+puzzleItemName+"WordsFound.json");
-				boolean deleted3 = file.delete();
+				boolean deleted3 = file3.delete();
 				if(deleted3== false){
 					Log.i("FoundWords NOT deleted", "FoundWords NOT deleted");
 				}
@@ -306,6 +307,16 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 				e.printStackTrace();
 			}
 			
+			
+		}
+		else if(menuItemName.equals("View Score")){
+			//http://08309.net.dcs.hull.ac.uk/api/admin/score?
+			String username = SharedPreferencesWrapper.getFromPrefs(this, "username", "");
+			
+			String url = "http://08309.net.dcs.hull.ac.uk/api/admin/score?username="+username+"&password="+password+"&date="+puzzleItemName;
+			RegHTTPAsync getPuzzleScore =  new RegHTTPAsync(StartActivity.this);
+			getPuzzleScore.execute(url);
+			getPuzzleScoreflag = true;
 			
 		}
 		
@@ -548,6 +559,16 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 			
 			Log.i("Todays puzzle id:", choosenPuzzleID);
 			assignTodaysPuzzle = false;
+		}
+		else if(getPuzzleScoreflag){
+			Log.i("Puzzle score result: ", httpData);
+			
+			if(httpData.contains("Puzzle is missing from database")){
+				Toast.makeText(StartActivity.this, "No score for this puzzle", Toast.LENGTH_SHORT).show();
+			}
+			else if(httpData.contains("Bad score")){
+				Toast.makeText(StartActivity.this, "No score for this puzzle", Toast.LENGTH_SHORT).show();
+			}
 		}
 		
 	}
