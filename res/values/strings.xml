@@ -14,7 +14,7 @@
     <string name="title_activity_account_info">AccountInfoActivity</string>
     <string name="title_activity_puzzle">PuzzleActivity</string>
     <string name="option_getsolution">Get Solution</string>
-    <string name="option_submitPuzzle">Delete this Puzzle</string>
+    <string name="option_submitPuzzle">Submit this Puzzle</string>
     
 
 </resources>

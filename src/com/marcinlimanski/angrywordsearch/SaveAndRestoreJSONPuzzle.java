@@ -156,6 +156,7 @@ public class SaveAndRestoreJSONPuzzle implements OnHTTPReg{
 	//Restores JSON object from internal memory
 	public static String RestoreJSONPuzzleandSolution(Context context, String filePath){
 		String data = "";
+		Log.i("File path: ", filePath);
 		File checkNormalFilePath = new File("/data/data/com.marcinlimanski.angrywordsearch/files/" +filePath+".json");
 		File checkArrayFilePath = new File("/data/data/com.marcinlimanski.angrywordsearch/files/"+ filePath+ "ArrayFormat"+".json");
 		try{

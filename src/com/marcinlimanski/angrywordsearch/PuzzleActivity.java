@@ -31,7 +31,7 @@ public class PuzzleActivity extends ActionBarActivity implements OnPOST{
 	private boolean letterSwitch = true;
 	public static float[] pointAArray = new float[2];
 	public static float[] pointBArray = new float[2];
-	
+	boolean submissionCanBeMadeFlag = false;
 	
 	private int tempPos = 0;
 	public static boolean startDrawFirstPoint = false;
@@ -103,13 +103,9 @@ public class PuzzleActivity extends ActionBarActivity implements OnPOST{
 		}
 		
 		if(editWords.equals("")){
-			//Getting user pass to use with bellow code
-			String username = SharedPreferencesWrapper.getFromPrefs(PuzzleActivity.this, "username", "");
-			String password = SharedPreferencesWrapper.getFromPrefs(PuzzleActivity.this, "password", "");
+			TVWordsToFind.setText("You have completed this puzzle!, submit your score using the options");
+			submissionCanBeMadeFlag = true;
 			
-			TVWordsToFind.setText("You have completed this puzzle!!");
-			String test= FormingSolutionSubmission.SubmitPuzzleSolution(LoadPuzzle.chosenPuzzleSolutionForSumbision, username, password);
-			Log.i("submision object", test);
 		}
 		else{
 			TVWordsToFind.setText(editWords.toString().substring(1));
@@ -266,7 +262,8 @@ public class PuzzleActivity extends ActionBarActivity implements OnPOST{
 						
 						//This is where you do the score send!!
 						if(editWords.equals("")){
-							TVWordsToFind.setText("You have completed this puzzle!!");
+							TVWordsToFind.setText("You have completed this puzzle!, submit your score using the options");
+							submissionCanBeMadeFlag = true;
 						}
 						else{
 							TVWordsToFind.setText(editWords.toString().substring(1));
@@ -533,6 +530,21 @@ public class PuzzleActivity extends ActionBarActivity implements OnPOST{
 				
 			case R.id.option_submitPuzzle:
 				Log.i("Submit puzzle option", "active");
+				if(submissionCanBeMadeFlag){
+					//Getting user pass to use with bellow code
+					String username = SharedPreferencesWrapper.getFromPrefs(PuzzleActivity.this, "username", "");
+					String password = SharedPreferencesWrapper.getFromPrefs(PuzzleActivity.this, "password", "");
+					
+					TVWordsToFind.setText("You have completed this puzzle!!");
+					String test= FormingSolutionSubmission.SubmitPuzzleSolution(LoadPuzzle.chosenPuzzleSolutionForSumbision, username, password);
+					Log.i("submision object", test);
+					
+					//Assigning todays puzzle for latter user
+					String[] params = {"http://08309.net.dcs.hull.ac.uk/api/wordsearch/submit", test};
+					
+					POSTAsync getTodaysPuzzle =  new POSTAsync(PuzzleActivity.this);
+					getTodaysPuzzle.execute(params);
+				}
 				handle = true;
 				break;
 			
@@ -548,13 +560,14 @@ public class PuzzleActivity extends ActionBarActivity implements OnPOST{
 	public void onBackPressed() {
 		startDrawFirstPoint = false;
 		startDrawSecondPoint = false;
+		submissionCanBeMadeFlag = false;
 		finish();
 		
 	}
 
 	@Override
 	public void onTaskPostCompleted(String httpData) throws JSONException {
-		// TODO Auto-generated method stub
+		Toast.makeText(PuzzleActivity.this, "Puzzle solution submited", Toast.LENGTH_SHORT).show();
 		
 	}
 }

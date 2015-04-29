@@ -87,10 +87,7 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 		password = SharedPreferencesWrapper.getFromPrefs(StartActivity.this, "password", "");
 		
 		//Assigning todays puzzle for latter user
-		String url = "http://08309.net.dcs.hull.ac.uk/api/wordsearch/current?username="+ username+ "&password=" +password;
-		RegHTTPAsync getTodaysPuzzle =  new RegHTTPAsync(StartActivity.this);
-		getTodaysPuzzle.execute(url);
-		assignTodaysPuzzle = true;
+		
 		
 		Log.i("On create global date", globalDates);
 	}
@@ -263,7 +260,7 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 				int pos =0;
 				for(int i =0; i<DatesArray.length(); i++){
 					JSONObject entryArray = DatesArray.getJSONObject(i);
-					if(entryArray.getString("date").toString().equals(StartActivity.puzzleName)){
+					if(entryArray.getString("date").toString().equals(puzzleItemName)){
 						pos = i;
 					}
 					
@@ -275,8 +272,8 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 				SaveAndRestoreJSONPuzzle.SaveJSONObjectDates(StartActivity.this, newDateObject);
 				
 				//Deleting the Puzzle and solution
-				File file = new File("/data/data/com.marcinlimanski.angrywordsearch/files/"+puzzleItemName+ "ArrayFormat"+".json");
 				File file2 = new File("/data/data/com.marcinlimanski.angrywordsearch/files/"+puzzleItemName+ ".json");
+				File file = new File("/data/data/com.marcinlimanski.angrywordsearch/files/"+puzzleItemName+ "ArrayFormat"+".json");
 				boolean deleted = file.delete();
 				boolean deleted2 = file2.delete();
 				if(deleted == false){
@@ -368,7 +365,7 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 
 			String todaysPuzzleDateNow = String.valueOf(yearNow) + "-" + String.valueOf(monthNow) + "-"+ String.valueOf(dayNow);
 			//setting name for the found words file
-			Log.i("Todas puzzle date 1: ", yearNow +" "+ monthNow + " " + dayNow);
+			Log.i("Todas puzzle date 1: ", yearNow +"-"+ monthNow + "-" + dayNow);
 			puzzleName = todaysPuzzleDateNow;
 			if(!SaveAndRestoreJSONPuzzle.RestoreJSONPuzzleandSolution(StartActivity.this, puzzleName).equals("")){
 
@@ -386,12 +383,11 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 				}
 			}
 			else{
-				//String test1 = SaveAndRestoreJSONPuzzle.RestoreJSONSates(StartActivity.this);
-				//Log.i("New dates object: ", test1);
-				String url = "http://08309.net.dcs.hull.ac.uk/api/wordsearch/solution?id="+choosenPuzzleID;
-				RegHTTPAsync getTodaysPuzzleSolution =  new RegHTTPAsync(StartActivity.this);
-				getTodaysPuzzleSolution.execute(url);
-				getTodaysPuzzleflag = true;
+				String url = "http://08309.net.dcs.hull.ac.uk/api/wordsearch/current?username="+ username+ "&password=" +password;
+				RegHTTPAsync getTodaysPuzzle =  new RegHTTPAsync(StartActivity.this);
+				getTodaysPuzzle.execute(url);
+				assignTodaysPuzzle = true;
+				
 			}
 			
 			
@@ -559,9 +555,16 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 			
 			Log.i("Todays puzzle id:", choosenPuzzleID);
 			assignTodaysPuzzle = false;
+			
+			//String test1 = SaveAndRestoreJSONPuzzle.RestoreJSONSates(StartActivity.this);
+			//Log.i("New dates object: ", test1);
+			String url = "http://08309.net.dcs.hull.ac.uk/api/wordsearch/solution?id="+choosenPuzzleID;
+			RegHTTPAsync getTodaysPuzzleSolution =  new RegHTTPAsync(StartActivity.this);
+			getTodaysPuzzleSolution.execute(url);
+			getTodaysPuzzleflag = true;
 		}
 		else if(getPuzzleScoreflag){
-			Log.i("Puzzle score result: ", httpData);
+			//Log.i("Puzzle score result: ", httpData);
 			
 			if(httpData.contains("Puzzle is missing from database")){
 				Toast.makeText(StartActivity.this, "No score for this puzzle", Toast.LENGTH_SHORT).show();
@@ -569,6 +572,17 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 			else if(httpData.contains("Bad score")){
 				Toast.makeText(StartActivity.this, "No score for this puzzle", Toast.LENGTH_SHORT).show();
 			}
+			else{
+				JSONObject jsonObject = new JSONObject(httpData);
+				JSONObject  jsonScoreObject = jsonObject.getJSONObject("ScoreData");
+				
+				String scoreDate = jsonScoreObject.getString("Date");
+				String score = jsonScoreObject.getString("Score");
+				Toast.makeText(StartActivity.this, "Your score for "+ scoreDate + " is: " +score, Toast.LENGTH_SHORT).show();
+				
+			}
+			
+			getPuzzleScoreflag = false;
 		}
 		
 	}
