@@ -307,13 +307,29 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 			
 		}
 		else if(menuItemName.equals("View Score")){
-			//http://08309.net.dcs.hull.ac.uk/api/admin/score?
-			String username = SharedPreferencesWrapper.getFromPrefs(this, "username", "");
+			String dateNowToCompare = String.valueOf(yearNow) + "-" + String.valueOf(monthNow) + "-"+ String.valueOf(dayNow);
 			
-			String url = "http://08309.net.dcs.hull.ac.uk/api/admin/score?username="+username+"&password="+password+"&date="+puzzleItemName;
-			RegHTTPAsync getPuzzleScore =  new RegHTTPAsync(StartActivity.this);
-			getPuzzleScore.execute(url);
-			getPuzzleScoreflag = true;
+			if(puzzleItemName.equals(dateNowToCompare)){
+				//http://08309.net.dcs.hull.ac.uk/api/admin/score?
+				String username = SharedPreferencesWrapper.getFromPrefs(this, "username", "");
+				String password = SharedPreferencesWrapper.getFromPrefs(this, "password", "");
+				
+				String url = "http://08309.net.dcs.hull.ac.uk/api/admin/score?username="+username+"&password="+password;
+				RegHTTPAsync getPuzzleScore =  new RegHTTPAsync(StartActivity.this);
+				getPuzzleScore.execute(url);
+				getPuzzleScoreflag = true;
+			}
+			else{
+				//http://08309.net.dcs.hull.ac.uk/api/admin/score?
+				String username = SharedPreferencesWrapper.getFromPrefs(this, "username", "");
+				String password = SharedPreferencesWrapper.getFromPrefs(this, "password", "");
+				
+				String url = "http://08309.net.dcs.hull.ac.uk/api/admin/score?username="+username+"&password="+password+"&date="+puzzleItemName;
+				RegHTTPAsync getPuzzleScore =  new RegHTTPAsync(StartActivity.this);
+				getPuzzleScore.execute(url);
+				getPuzzleScoreflag = true;
+			}
+			
 			
 		}
 		
@@ -564,10 +580,12 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 			getTodaysPuzzleflag = true;
 		}
 		else if(getPuzzleScoreflag){
-			//Log.i("Puzzle score result: ", httpData);
+			Log.i("Puzzle score result: ", httpData);
 			
 			if(httpData.contains("Puzzle is missing from database")){
 				Toast.makeText(StartActivity.this, "No score for this puzzle", Toast.LENGTH_SHORT).show();
+				
+				
 			}
 			else if(httpData.contains("Bad score")){
 				Toast.makeText(StartActivity.this, "No score for this puzzle", Toast.LENGTH_SHORT).show();
@@ -578,7 +596,7 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 				
 				String scoreDate = jsonScoreObject.getString("Date");
 				String score = jsonScoreObject.getString("Score");
-				Toast.makeText(StartActivity.this, "Your score for "+ scoreDate + " is: " +score, Toast.LENGTH_SHORT).show();
+				Toast.makeText(StartActivity.this, "Your score for "+ scoreDate + " is: " +score, Toast.LENGTH_LONG).show();
 				
 			}
 			

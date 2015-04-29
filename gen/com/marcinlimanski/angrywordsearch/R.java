@@ -1656,16 +1656,16 @@ containing a value of this type.
         public static final int action_mode_bar=0x7f09002e;
         public static final int action_mode_bar_stub=0x7f09002d;
         public static final int action_mode_close_button=0x7f090020;
-        public static final int action_settings=0x7f090058;
+        public static final int action_settings=0x7f090059;
         public static final int activity_chooser_view_content=0x7f090021;
         public static final int always=0x7f090014;
         public static final int beginning=0x7f09001b;
-        public static final int btnAddPuzzle=0x7f090057;
+        public static final int btnAddPuzzle=0x7f090058;
         public static final int btnChangePassword=0x7f090045;
         public static final int btnLogInMain=0x7f090052;
         public static final int btnLogUser=0x7f090048;
         public static final int btnReg=0x7f090050;
-        public static final int btnTodaysPuzzle=0x7f090056;
+        public static final int btnTodaysPuzzle=0x7f090057;
         public static final int checkBox1=0x7f090051;
         public static final int checkbox=0x7f090029;
         public static final int collapseActionView=0x7f090015;
@@ -1685,17 +1685,17 @@ containing a value of this type.
         public static final int ifRoom=0x7f090016;
         public static final int image=0x7f090023;
         public static final int listMode=0x7f09000a;
-        public static final int listView1=0x7f090055;
+        public static final int listView1=0x7f090056;
         public static final int list_item=0x7f090025;
         public static final int middle=0x7f09001d;
         public static final int never=0x7f090017;
         public static final int none=0x7f09000f;
         public static final int normal=0x7f09000b;
-        public static final int option_accinfo=0x7f09005c;
-        public static final int option_getsolution=0x7f090059;
-        public static final int option_logout=0x7f09005b;
-        public static final int option_submitPuzzle=0x7f09005a;
-        public static final int option_unregister=0x7f09005d;
+        public static final int option_accinfo=0x7f09005d;
+        public static final int option_getsolution=0x7f09005a;
+        public static final int option_logout=0x7f09005c;
+        public static final int option_submitPuzzle=0x7f09005b;
+        public static final int option_unregister=0x7f09005e;
         public static final int progress_circular=0x7f090007;
         public static final int progress_horizontal=0x7f090008;
         public static final int radio=0x7f09002b;
@@ -1724,6 +1724,7 @@ containing a value of this type.
         public static final int tbSurnameReg=0x7f09004a;
         public static final int tbUserNameLog=0x7f090046;
         public static final int tbUsernameReg=0x7f09004c;
+        public static final int textBoxSolution=0x7f090055;
         public static final int textView1=0x7f090041;
         public static final int textView2=0x7f090043;
         public static final int textView3=0x7f09004b;
@@ -1789,9 +1790,10 @@ containing a value of this type.
         public static final int activity_log=0x7f030018;
         public static final int activity_main=0x7f030019;
         public static final int activity_puzzle=0x7f03001a;
-        public static final int activity_start=0x7f03001b;
-        public static final int data_item=0x7f03001c;
-        public static final int support_simple_spinner_dropdown_item=0x7f03001d;
+        public static final int activity_solution=0x7f03001b;
+        public static final int activity_start=0x7f03001c;
+        public static final int data_item=0x7f03001d;
+        public static final int support_simple_spinner_dropdown_item=0x7f03001e;
     }
     public static final class menu {
         public static final int account_info=0x7f0d0000;
@@ -1799,7 +1801,8 @@ containing a value of this type.
         public static final int log=0x7f0d0002;
         public static final int main=0x7f0d0003;
         public static final int puzzle=0x7f0d0004;
-        public static final int start=0x7f0d0005;
+        public static final int solution=0x7f0d0005;
+        public static final int start=0x7f0d0006;
     }
     public static final class string {
         /**  Content description for the action bar "home" affordance. [CHAR LIMIT=NONE] 
@@ -1870,6 +1873,7 @@ containing a value of this type.
         public static final int title_activity_account_info=0x7f0a001a;
         public static final int title_activity_log=0x7f0a0016;
         public static final int title_activity_puzzle=0x7f0a001b;
+        public static final int title_activity_solution=0x7f0a001e;
         public static final int title_activity_start=0x7f0a0015;
         public static final int title_activity_test=0x7f0a0013;
     }

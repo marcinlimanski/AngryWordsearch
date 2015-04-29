@@ -2,13 +2,16 @@ package com.marcinlimanski.angrywordsearch;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.support.v7.app.ActionBarActivity;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.os.Bundle;
 import android.util.Log;
@@ -32,6 +35,16 @@ public class PuzzleActivity extends ActionBarActivity implements OnPOST{
 	public static float[] pointAArray = new float[2];
 	public static float[] pointBArray = new float[2];
 	boolean submissionCanBeMadeFlag = false;
+	
+	//For datepicker
+	private DateFormat formate=DateFormat.getDateInstance();
+	private Calendar calendar=Calendar.getInstance();
+	
+	private int yearNow = calendar.get(Calendar.YEAR);
+	private int mNow = calendar.get(Calendar.MONTH);
+	private int monthNow = mNow +1;
+	private int dayNow = calendar.get(Calendar.DAY_OF_MONTH);
+	
 	
 	private int tempPos = 0;
 	public static boolean startDrawFirstPoint = false;
@@ -297,7 +310,7 @@ public class PuzzleActivity extends ActionBarActivity implements OnPOST{
 			JSONObject jsonObject = new JSONObject(LoadPuzzle.playingPuzzleSolution);
 			//Accessing the SolutionWords arraY
 			JSONArray solutionWordsArray =  jsonObject.getJSONArray("SolutionWords");
-			
+			//Log.i("Solution words", )
 
 			
 			//Looping through the solutionWord array
@@ -525,6 +538,32 @@ public class PuzzleActivity extends ActionBarActivity implements OnPOST{
 		//using switch statment to catch the diffrent id
 		switch(id){
 			case R.id.option_getsolution:
+				String todaysPuzzleDateNow = String.valueOf(yearNow) + "-" + String.valueOf(monthNow) + "-"+ String.valueOf(dayNow);
+				if(StartActivity.puzzleName.equals(todaysPuzzleDateNow))
+				{
+					Toast.makeText(PuzzleActivity.this, "Solution for todays puzzle can't be viewd!", Toast.LENGTH_SHORT).show();
+				}
+				else{
+					try{
+						//Constructing the Json Solution object
+						JSONObject jsonObject = new JSONObject(LoadPuzzle.playingPuzzleSolution);
+						//Accessing the SolutionWords arraY
+						JSONArray solutionWordsArray =  jsonObject.getJSONArray("SolutionWords");
+						String solutionArrayObject = solutionWordsArray.toString();
+						Log.i("Solution: ", solutionWordsArray.toString());
+						
+						Intent solutionActivityIntent = new Intent(PuzzleActivity.this, SolutionActivity.class);
+						solutionActivityIntent.putExtra("solutionArray", LoadPuzzle.playingPuzzleSolution);
+						startActivity(solutionActivityIntent);
+						
+						
+					}
+					catch(JSONException e){
+						e.printStackTrace();
+					}
+				
+				}
+					
 				handle = true;
 				break;
 				
