@@ -545,6 +545,9 @@ public class PuzzleActivity extends ActionBarActivity implements OnPOST{
 					POSTAsync getTodaysPuzzle =  new POSTAsync(PuzzleActivity.this);
 					getTodaysPuzzle.execute(params);
 				}
+				else{
+					Toast.makeText(PuzzleActivity.this, "You need to complete the puzzle first", Toast.LENGTH_SHORT).show();
+				}
 				handle = true;
 				break;
 			
