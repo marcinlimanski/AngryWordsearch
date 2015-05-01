@@ -18,6 +18,8 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -135,18 +137,24 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 				break;
 			
 			case R.id.option_accinfo:
-				accInfoFlag = true;
+				if(isInternetOn()){
+					accInfoFlag = true;
 
-				//Extracting the user credentials from shared pref class
-				username = SharedPreferencesWrapper.getFromPrefs(StartActivity.this, "username", "");
-				password = SharedPreferencesWrapper.getFromPrefs(StartActivity.this, "password", "");
+					//Extracting the user credentials from shared pref class
+					username = SharedPreferencesWrapper.getFromPrefs(StartActivity.this, "username", "");
+					password = SharedPreferencesWrapper.getFromPrefs(StartActivity.this, "password", "");
+					
+					//Creating a ASync thread
+					//Using HttpClient to send the extracted data to register a user
+					String url = "http://08309.net.dcs.hull.ac.uk/api/admin/details?username="+
+					username+"&password="+password;
+					RegHTTPAsync regUser =  new RegHTTPAsync(StartActivity.this);
+					regUser.execute(url);
+				}
+				else{
+					Toast.makeText(this, "Internet connection must be present to view account information", Toast.LENGTH_LONG).show();
+				}
 				
-				//Creating a ASync thread
-				//Using HttpClient to send the extracted data to register a user
-				String url = "http://08309.net.dcs.hull.ac.uk/api/admin/details?username="+
-				username+"&password="+password;
-				RegHTTPAsync regUser =  new RegHTTPAsync(StartActivity.this);
-				regUser.execute(url);
 				handle = true;
 				break;
 				
@@ -308,27 +316,32 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 		}
 		else if(menuItemName.equals("View Score")){
 			String dateNowToCompare = String.valueOf(yearNow) + "-" + String.valueOf(monthNow) + "-"+ String.valueOf(dayNow);
-			
-			if(puzzleItemName.equals(dateNowToCompare)){
-				//http://08309.net.dcs.hull.ac.uk/api/admin/score?
-				String username = SharedPreferencesWrapper.getFromPrefs(this, "username", "");
-				String password = SharedPreferencesWrapper.getFromPrefs(this, "password", "");
-				
-				String url = "http://08309.net.dcs.hull.ac.uk/api/admin/score?username="+username+"&password="+password;
-				RegHTTPAsync getPuzzleScore =  new RegHTTPAsync(StartActivity.this);
-				getPuzzleScore.execute(url);
-				getPuzzleScoreflag = true;
+			if(isInternetOn()){
+				if(puzzleItemName.equals(dateNowToCompare)){
+					//http://08309.net.dcs.hull.ac.uk/api/admin/score?
+					String username = SharedPreferencesWrapper.getFromPrefs(this, "username", "");
+					String password = SharedPreferencesWrapper.getFromPrefs(this, "password", "");
+					
+					String url = "http://08309.net.dcs.hull.ac.uk/api/admin/score?username="+username+"&password="+password;
+					RegHTTPAsync getPuzzleScore =  new RegHTTPAsync(StartActivity.this);
+					getPuzzleScore.execute(url);
+					getPuzzleScoreflag = true;
+				}
+				else{
+					//http://08309.net.dcs.hull.ac.uk/api/admin/score?
+					String username = SharedPreferencesWrapper.getFromPrefs(this, "username", "");
+					String password = SharedPreferencesWrapper.getFromPrefs(this, "password", "");
+					
+					String url = "http://08309.net.dcs.hull.ac.uk/api/admin/score?username="+username+"&password="+password+"&date="+puzzleItemName;
+					RegHTTPAsync getPuzzleScore =  new RegHTTPAsync(StartActivity.this);
+					getPuzzleScore.execute(url);
+					getPuzzleScoreflag = true;
+				}
 			}
 			else{
-				//http://08309.net.dcs.hull.ac.uk/api/admin/score?
-				String username = SharedPreferencesWrapper.getFromPrefs(this, "username", "");
-				String password = SharedPreferencesWrapper.getFromPrefs(this, "password", "");
-				
-				String url = "http://08309.net.dcs.hull.ac.uk/api/admin/score?username="+username+"&password="+password+"&date="+puzzleItemName;
-				RegHTTPAsync getPuzzleScore =  new RegHTTPAsync(StartActivity.this);
-				getPuzzleScore.execute(url);
-				getPuzzleScoreflag = true;
+				Toast.makeText(StartActivity.this, "Internet connection must be present to view the score", Toast.LENGTH_LONG).show();
 			}
+			
 			
 			
 		}
@@ -378,33 +391,38 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 		puzzleName = "";
 		if(v.getId() == R.id.btnTodaysPuzzle){
 			
+			if(isInternetOn()){
+				String todaysPuzzleDateNow = String.valueOf(yearNow) + "-" + String.valueOf(monthNow) + "-"+ String.valueOf(dayNow);
+				//setting name for the found words file
+				Log.i("Todas puzzle date 1: ", yearNow +"-"+ monthNow + "-" + dayNow);
+				puzzleName = todaysPuzzleDateNow;
+				if(!SaveAndRestoreJSONPuzzle.RestoreJSONPuzzleandSolution(StartActivity.this, puzzleName).equals("")){
 
-			String todaysPuzzleDateNow = String.valueOf(yearNow) + "-" + String.valueOf(monthNow) + "-"+ String.valueOf(dayNow);
-			//setting name for the found words file
-			Log.i("Todas puzzle date 1: ", yearNow +"-"+ monthNow + "-" + dayNow);
-			puzzleName = todaysPuzzleDateNow;
-			if(!SaveAndRestoreJSONPuzzle.RestoreJSONPuzzleandSolution(StartActivity.this, puzzleName).equals("")){
 
-
-				Log.i("Todas puzzle date: 2", puzzleName);
-				//Loading the puzzle
-				String jsonPuzzleAndSolution = SaveAndRestoreJSONPuzzle.RestoreJSONPuzzleandSolution(StartActivity.this, puzzleName);
-				//Load choosen puzzle 
-				if(LoadPuzzle.InitPuzzle(jsonPuzzleAndSolution)){
-					Intent viewPussleIntent = new Intent(StartActivity.this, PuzzleActivity.class);
-					startActivity(viewPussleIntent);
+					Log.i("Todas puzzle date: 2", puzzleName);
+					//Loading the puzzle
+					String jsonPuzzleAndSolution = SaveAndRestoreJSONPuzzle.RestoreJSONPuzzleandSolution(StartActivity.this, puzzleName);
+					//Load choosen puzzle 
+					if(LoadPuzzle.InitPuzzle(jsonPuzzleAndSolution)){
+						Intent viewPussleIntent = new Intent(StartActivity.this, PuzzleActivity.class);
+						startActivity(viewPussleIntent);
+					}
+					else{
+						Toast.makeText(StartActivity.this, "Sorry, there was a problem loading the puzzle", Toast.LENGTH_SHORT).show();
+					}
 				}
 				else{
-					Toast.makeText(StartActivity.this, "Sorry, there was a problem loading the puzzle", Toast.LENGTH_SHORT).show();
+					String url = "http://08309.net.dcs.hull.ac.uk/api/wordsearch/current?username="+ username+ "&password=" +password;
+					RegHTTPAsync getTodaysPuzzle =  new RegHTTPAsync(StartActivity.this);
+					getTodaysPuzzle.execute(url);
+					assignTodaysPuzzle = true;
+					
 				}
 			}
 			else{
-				String url = "http://08309.net.dcs.hull.ac.uk/api/wordsearch/current?username="+ username+ "&password=" +password;
-				RegHTTPAsync getTodaysPuzzle =  new RegHTTPAsync(StartActivity.this);
-				getTodaysPuzzle.execute(url);
-				assignTodaysPuzzle = true;
-				
+				Toast.makeText(this, "Internet connection must be present to download the puzzle", Toast.LENGTH_LONG).show();
 			}
+			
 			
 			
 			
@@ -426,23 +444,58 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 		new DatePickerDialog(StartActivity.this, datePicker, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
 	}
 	
+   public final boolean isInternetOn() {
+     
+    // get Connectivity Manager object to check connection
+    ConnectivityManager connec =  
+                   (ConnectivityManager)getSystemService(StartActivity.CONNECTIVITY_SERVICE);
+     
+       // Check for network connections
+        if ( connec.getNetworkInfo(0).getState() == android.net.NetworkInfo.State.CONNECTED ||
+             connec.getNetworkInfo(0).getState() == android.net.NetworkInfo.State.CONNECTING ||
+             connec.getNetworkInfo(1).getState() == android.net.NetworkInfo.State.CONNECTING ||
+             connec.getNetworkInfo(1).getState() == android.net.NetworkInfo.State.CONNECTED ) {
+            
+            
+            return true;
+             
+        } else if ( 
+          connec.getNetworkInfo(0).getState() == android.net.NetworkInfo.State.DISCONNECTED ||
+          connec.getNetworkInfo(1).getState() == android.net.NetworkInfo.State.DISCONNECTED  ) {
+           
+            return false;
+        }
+      return false;
+    }
+	
+   @Override
+	public void onBackPressed() {
+		
+		
+	}
+   
 	//Datepicker Dialog
 	DatePickerDialog.OnDateSetListener datePicker = new DatePickerDialog.OnDateSetListener() {
 		
 		@Override
 		public void onDateSet(DatePicker view, int year, int monthOfYear,int dayOfMonth) {
+			if(isInternetOn()){
+				int updatedMonth = monthOfYear + 1;
+				Log.i("Date: ",  year +"-"+updatedMonth+"-"+dayOfMonth);
+				
+				//Assigning the choosen puzzle date to be pased for puzle save 
+				choosenPuzzleDate = year +"-"+updatedMonth+"-"+dayOfMonth;
+				
+				//Sending a request for the old puzzle object
+				String url = "http://08309.net.dcs.hull.ac.uk/api/wordsearch/puzzle?date=" + year +"-"+updatedMonth+"-"+dayOfMonth;
+				RegHTTPAsync getOldPuzzle =  new RegHTTPAsync(StartActivity.this);
+				getOldPuzzle.execute(url);
+				getOldPuzzleflag = true;
+			}
+			else{
+				Toast.makeText(StartActivity.this, "Internet connection must be present to download the puzzle", Toast.LENGTH_LONG).show();
+			}
 			
-			int updatedMonth = monthOfYear + 1;
-			Log.i("Date: ",  year +"-"+updatedMonth+"-"+dayOfMonth);
-			
-			//Assigning the choosen puzzle date to be pased for puzle save 
-			choosenPuzzleDate = year +"-"+updatedMonth+"-"+dayOfMonth;
-			
-			//Sending a request for the old puzzle object
-			String url = "http://08309.net.dcs.hull.ac.uk/api/wordsearch/puzzle?date=" + year +"-"+updatedMonth+"-"+dayOfMonth;
-			RegHTTPAsync getOldPuzzle =  new RegHTTPAsync(StartActivity.this);
-			getOldPuzzle.execute(url);
-			getOldPuzzleflag = true;
 			
 		}
 	};
@@ -604,4 +657,6 @@ public class StartActivity extends ActionBarActivity implements OnHTTPReg{
 		}
 		
 	}
-}
+	}
+
+

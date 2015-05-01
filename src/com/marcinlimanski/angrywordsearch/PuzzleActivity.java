@@ -13,6 +13,7 @@ import org.json.JSONObject;
 import android.support.v7.app.ActionBarActivity;
 import android.content.Intent;
 import android.graphics.Canvas;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -568,25 +569,31 @@ public class PuzzleActivity extends ActionBarActivity implements OnPOST{
 				break;
 				
 			case R.id.option_submitPuzzle:
-				Log.i("Submit puzzle option", "active");
-				if(submissionCanBeMadeFlag){
-					//Getting user pass to use with bellow code
-					String username = SharedPreferencesWrapper.getFromPrefs(PuzzleActivity.this, "username", "");
-					String password = SharedPreferencesWrapper.getFromPrefs(PuzzleActivity.this, "password", "");
-					
-					TVWordsToFind.setText("You have completed this puzzle!!");
-					String test= FormingSolutionSubmission.SubmitPuzzleSolution(LoadPuzzle.chosenPuzzleSolutionForSumbision, username, password);
-					Log.i("submision object", test);
-					
-					//Assigning todays puzzle for latter user
-					String[] params = {"http://08309.net.dcs.hull.ac.uk/api/wordsearch/submit", test};
-					
-					POSTAsync getTodaysPuzzle =  new POSTAsync(PuzzleActivity.this);
-					getTodaysPuzzle.execute(params);
+				if(isInternetOn()){
+					Log.i("Submit puzzle option", "active");
+					if(submissionCanBeMadeFlag){
+						//Getting user pass to use with bellow code
+						String username = SharedPreferencesWrapper.getFromPrefs(PuzzleActivity.this, "username", "");
+						String password = SharedPreferencesWrapper.getFromPrefs(PuzzleActivity.this, "password", "");
+						
+						TVWordsToFind.setText("You have completed this puzzle!!");
+						String test= FormingSolutionSubmission.SubmitPuzzleSolution(LoadPuzzle.chosenPuzzleSolutionForSumbision, username, password);
+						Log.i("submision object", test);
+						
+						//Assigning todays puzzle for latter user
+						String[] params = {"http://08309.net.dcs.hull.ac.uk/api/wordsearch/submit", test};
+						
+						POSTAsync getTodaysPuzzle =  new POSTAsync(PuzzleActivity.this);
+						getTodaysPuzzle.execute(params);
+					}
+					else{
+						Toast.makeText(PuzzleActivity.this, "You need to complete the puzzle first", Toast.LENGTH_SHORT).show();
+					}
 				}
 				else{
-					Toast.makeText(PuzzleActivity.this, "You need to complete the puzzle first", Toast.LENGTH_SHORT).show();
+					Toast.makeText(PuzzleActivity.this, "You need to have internet connection tosubmit the score", Toast.LENGTH_SHORT).show();
 				}
+				
 				handle = true;
 				break;
 			
@@ -597,6 +604,29 @@ public class PuzzleActivity extends ActionBarActivity implements OnPOST{
 		return handle;
 	}
 	
+	public final boolean isInternetOn() {
+	     
+	    // get Connectivity Manager object to check connection
+	    ConnectivityManager connec =  
+	                   (ConnectivityManager)getSystemService(StartActivity.CONNECTIVITY_SERVICE);
+	     
+	       // Check for network connections
+	        if ( connec.getNetworkInfo(0).getState() == android.net.NetworkInfo.State.CONNECTED ||
+	             connec.getNetworkInfo(0).getState() == android.net.NetworkInfo.State.CONNECTING ||
+	             connec.getNetworkInfo(1).getState() == android.net.NetworkInfo.State.CONNECTING ||
+	             connec.getNetworkInfo(1).getState() == android.net.NetworkInfo.State.CONNECTED ) {
+	            
+	            
+	            return true;
+	             
+	        } else if ( 
+	          connec.getNetworkInfo(0).getState() == android.net.NetworkInfo.State.DISCONNECTED ||
+	          connec.getNetworkInfo(1).getState() == android.net.NetworkInfo.State.DISCONNECTED  ) {
+	           
+	            return false;
+	        }
+	      return false;
+	    }
 	
 	@Override
 	public void onBackPressed() {
